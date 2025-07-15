@@ -24,6 +24,7 @@ export const NavbarLink = ({
       href={href}
       className={`relative text-sm font-medium py-1 px-3 transition-colors duration-200 text-slate-12 w-[90px] flex items-center justify-center
         ${pathname === href ? 'opacity-100' : 'opacity-30 hover:opacity-60'}`}
+      {...(href === '/manifesto' ? { 'data-manifesto-btn': true } : {})}
     >
       {children}
     </Link>

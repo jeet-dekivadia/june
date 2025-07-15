@@ -4,6 +4,7 @@ import type React from "react"
 import { useRef, useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { ArrowRight } from "lucide-react"
+import { createPortal } from "react-dom"
 
 type InputForm = {
   buttonCopy: {
@@ -27,6 +28,7 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
   const [error, setError] = useState<string>()
   const [value, setValue] = useState("")
   const [showManifestoPrompt, setShowManifestoPrompt] = useState(false)
+  const [promptPosition, setPromptPosition] = useState<{ top: number; left: number } | null>(null)
   const errorTimeout = useRef<NodeJS.Timeout | null>(null)
   const supabase = createClient()
 
@@ -34,6 +36,15 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
   useEffect(() => {
     if (state === STATES.success) {
       const promptTimeout = setTimeout(() => {
+        // Find the Manifesto button and position the prompt below it
+        const manifestoBtn = document.querySelector('[data-manifesto-btn]') as HTMLElement
+        if (manifestoBtn) {
+          const rect = manifestoBtn.getBoundingClientRect()
+          setPromptPosition({
+            top: rect.bottom + window.scrollY + 8, // 8px below the button
+            left: rect.left + window.scrollX + rect.width / 2,
+          })
+        }
         setShowManifestoPrompt(true)
       }, 1000)
 
@@ -138,36 +149,46 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
       </form>
 
       {/* Manifesto prompt with curved arrow */}
-      {showManifestoPrompt && (
-        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-in slide-in-from-bottom-4 duration-700">
-          <div className="relative">
-            {/* Curved arrow SVG */}
-            <svg
-              width="60"
-              height="40"
-              viewBox="0 0 60 40"
-              className="text-slate-11 animate-bounce"
-              style={{ animationDelay: "0.5s" }}
-            >
-              <path d="M10 30 Q30 10 50 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
-              <path
-                d="M45 15 L50 20 L45 25"
-                stroke="currentColor"
-                strokeWidth="2"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+      {showManifestoPrompt && promptPosition && typeof window !== 'undefined' && createPortal(
+        <div
+          style={{
+            position: 'absolute',
+            top: promptPosition.top,
+            left: promptPosition.left,
+            transform: 'translate(-50%, -100%)',
+            zIndex: 50,
+            pointerEvents: 'none',
+          }}
+          className="flex flex-col items-center animate-in slide-in-from-bottom-4 duration-700"
+        >
+          {/* Upward curved arrow SVG */}
+          <svg
+            width="60"
+            height="40"
+            viewBox="0 0 60 40"
+            className="text-slate-11 animate-bounce"
+            style={{ animationDelay: "0.5s" }}
+          >
+            <path d="M50 30 Q30 10 10 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <path
+              d="M15 15 L10 20 L15 25"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
           <a
             href="/manifesto"
-            className="mt-2 text-sm text-slate-11 hover:text-slate-12 transition-colors duration-200 flex items-center gap-1 group"
+            className="mt-2 text-sm text-slate-11 hover:text-slate-12 transition-colors duration-200 flex items-center gap-1 group pointer-events-auto"
+            style={{ pointerEvents: 'auto' }}
           >
             Check out our manifesto
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </a>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
