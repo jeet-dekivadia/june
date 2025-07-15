@@ -5,7 +5,6 @@ import { ThemeProvider } from "next-themes"
 import { Header } from "@/components/header"
 import { MeshGradientComponent } from "@/components/mesh-gradient" // Using the original MeshGradientComponent
 import "./globals.css"
-import CurvedLoop from "@/components/curved-loop/CurvedLoop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,15 +68,6 @@ export default function RootLayout({
               <main className="flex justify-center">{children}</main>
             </div>
           </div>
-          {/* Footer with CurvedLoop Marquee at the bottom of all pages */}
-          <footer className="w-full flex justify-center items-center py-2 bg-transparent">
-            <CurvedLoop
-              marqueeText="We ✦ don't ✦ Match ✦ We ✦ Introduce ✦"
-              speed={5}
-              curveAmount={-400}
-              interactive={false}
-            />
-          </footer>
         </ThemeProvider>
       </body>
     </html>
