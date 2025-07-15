@@ -153,24 +153,53 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
         <div
           style={{
             position: 'absolute',
-            top: promptPosition.top,
-            left: promptPosition.left,
+            top: promptPosition.top - 12, // move a bit higher
+            left: promptPosition.left + 48, // move to the right of the button
             transform: 'translate(-50%, -100%)',
             zIndex: 50,
             pointerEvents: 'none',
           }}
         >
-          {/* Clean upward arrow SVG, tip at Manifesto button */}
+          {/* Animated looping arrow SVG */}
           <svg
-            width="36"
-            height="36"
-            viewBox="0 0 36 36"
+            width="120"
+            height="80"
+            viewBox="0 0 120 80"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            style={{ display: 'block' }}
           >
-            <path d="M18 32V6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-            <path d="M10 14L18 6L26 14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M10 70 Q60 10 80 40 Q100 70 60 60 Q40 55 90 20"
+              stroke="currentColor"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                strokeDasharray: 400,
+                strokeDashoffset: 400,
+                animation: 'drawArrow 1.5s cubic-bezier(0.4,0,0.2,1) forwards',
+              }}
+            />
+            {/* Arrowhead */}
+            <polygon
+              points="92,15 100,20 90,25"
+              fill="currentColor"
+              style={{
+                opacity: 0,
+                animation: 'fadeInArrowHead 0.5s 1.2s forwards',
+              }}
+            />
           </svg>
+          <style>{`
+            @keyframes drawArrow {
+              to { stroke-dashoffset: 0; }
+            }
+            @keyframes fadeInArrowHead {
+              to { opacity: 1; }
+            }
+          `}</style>
         </div>,
         document.body
       )}
