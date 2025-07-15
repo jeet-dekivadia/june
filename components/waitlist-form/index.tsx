@@ -159,34 +159,18 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
             zIndex: 50,
             pointerEvents: 'none',
           }}
-          className="flex flex-col items-center animate-in slide-in-from-bottom-4 duration-700"
         >
-          {/* Upward curved arrow SVG */}
+          {/* Clean upward arrow SVG, tip at Manifesto button */}
           <svg
-            width="60"
-            height="40"
-            viewBox="0 0 60 40"
-            className="text-slate-11 animate-bounce"
-            style={{ animationDelay: "0.5s" }}
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M50 30 Q30 10 10 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
-            <path
-              d="M15 15 L10 20 L15 25"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M18 32V6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M10 14L18 6L26 14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <a
-            href="/manifesto"
-            className="mt-2 text-sm text-slate-11 hover:text-slate-12 transition-colors duration-200 flex items-center gap-1 group pointer-events-auto"
-            style={{ pointerEvents: 'auto' }}
-          >
-            Check out our manifesto
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-          </a>
         </div>,
         document.body
       )}
