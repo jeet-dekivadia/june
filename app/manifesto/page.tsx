@@ -41,19 +41,19 @@ export default function Manifesto() {
           <p>No more endless scrolling. No more ghosting after "hey." Just one match that matters.</p>
           <p>Because when dating becomes intentional again, connection becomes real.</p>
 
-          <div className="mt-8 pt-6 border-t border-slate-6">
-            <p className="text-sm text-slate-9 mb-4">
+          <div className="mt-16 pt-18 border-t border-slate-12">
+            <p className="text-sm text-slate-18 mb-8">
               <strong>Backed by:</strong> Nas Company, Nusseir Yasin, and Aija Mayrock
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-0.5 items-start">
             <p className={clsx("text-slate-12 text-4xl font-medium italic transform -rotate-12", font.className)}>
               The June Team
             </p>
-            <div className="flex flex-col gap-1 mt-2">
+            <div className="flex flex-col gap-5 mt-2">
               <p className="text-slate-11 text-sm font-medium">
                 <strong>Jeet Dekivadia</strong> & <strong>Kartikey Bihani</strong>
               </p>
