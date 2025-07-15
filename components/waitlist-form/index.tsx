@@ -31,18 +31,30 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
   const [promptPosition, setPromptPosition] = useState<{ top: number; left: number } | null>(null)
   const errorTimeout = useRef<NodeJS.Timeout | null>(null)
   const supabase = createClient()
+  const formRef = useRef<HTMLDivElement>(null)
+  const [arrowStart, setArrowStart] = useState<{ x: number; y: number } | null>(null)
+  const [arrowEnd, setArrowEnd] = useState<{ x: number; y: number } | null>(null)
 
   // Show manifesto prompt after success animation
   useEffect(() => {
     if (state === STATES.success) {
       const promptTimeout = setTimeout(() => {
-        // Find the Manifesto button and position the prompt below it
+        // Find Manifesto button
         const manifestoBtn = document.querySelector('[data-manifesto-btn]') as HTMLElement
-        if (manifestoBtn) {
-          const rect = manifestoBtn.getBoundingClientRect()
-          setPromptPosition({
-            top: rect.bottom + window.scrollY + 8, // 8px below the button
-            left: rect.left + window.scrollX + rect.width / 2,
+        // Find the main box (form)
+        const formBox = formRef.current
+        if (manifestoBtn && formBox) {
+          const rectEnd = manifestoBtn.getBoundingClientRect()
+          const rectStart = formBox.getBoundingClientRect()
+          // Start: center-top of form box
+          setArrowStart({
+            x: rectStart.left + rectStart.width / 2,
+            y: rectStart.top + window.scrollY,
+          })
+          // End: just above and to the right of Manifesto button
+          setArrowEnd({
+            x: rectEnd.left + rectEnd.width * 0.8,
+            y: rectEnd.top + window.scrollY - 12,
           })
         }
         setShowManifestoPrompt(true)
@@ -99,7 +111,7 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
   const inputDisabled = state === "loading" || state === "success"
 
   return (
-    <div className="relative">
+    <div className="relative" ref={formRef}>
       <form className="flex flex-col gap-2 w-full relative" onSubmit={handleSubmit}>
         <div className="flex items-center justify-between gap-3 relative">
           <input
@@ -149,58 +161,76 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
       </form>
 
       {/* Manifesto prompt with curved arrow */}
-      {showManifestoPrompt && promptPosition && typeof window !== 'undefined' && createPortal(
-        <div
-          style={{
-            position: 'absolute',
-            top: promptPosition.top - 12, // move a bit higher
-            left: promptPosition.left + 48, // move to the right of the button
-            transform: 'translate(-50%, -100%)',
-            zIndex: 50,
-            pointerEvents: 'none',
-          }}
-        >
-          {/* Animated looping arrow SVG */}
-          <svg
-            width="120"
-            height="80"
-            viewBox="0 0 120 80"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ display: 'block' }}
-          >
-            <path
-              d="M10 70 Q60 10 80 40 Q100 70 60 60 Q40 55 90 20"
-              stroke="currentColor"
-              strokeWidth="3"
+      {showManifestoPrompt && arrowStart && arrowEnd && typeof window !== 'undefined' && createPortal(
+        (() => {
+          // Calculate SVG dimensions and path
+          const minX = Math.min(arrowStart.x, arrowEnd.x) - 60
+          const minY = Math.min(arrowStart.y, arrowEnd.y) - 60
+          const width = Math.abs(arrowEnd.x - arrowStart.x) + 120
+          const height = Math.abs(arrowEnd.y - arrowStart.y) + 120
+          // Start and end relative to SVG
+          const startX = arrowStart.x - minX
+          const startY = arrowStart.y - minY
+          const endX = arrowEnd.x - minX
+          const endY = arrowEnd.y - minY
+          // Control points for two loops (cubic Bezier)
+          const cp1X = startX + (endX - startX) * 0.2
+          const cp1Y = startY - 120
+          const cp2X = startX + (endX - startX) * 0.4
+          const cp2Y = startY + 80
+          const cp3X = startX + (endX - startX) * 0.6
+          const cp3Y = startY - 120
+          const cp4X = startX + (endX - startX) * 0.8
+          const cp4Y = startY + 80
+          // SVG path with two loops
+          const path = `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${(startX + endX) / 2} ${(startY + endY) / 2} S ${cp3X} ${cp3Y}, ${endX} ${endY}`
+          return (
+            <svg
+              style={{
+                position: 'absolute',
+                left: minX,
+                top: minY,
+                pointerEvents: 'none',
+                zIndex: 50,
+              }}
+              width={width}
+              height={height}
               fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{
-                strokeDasharray: 400,
-                strokeDashoffset: 400,
-                animation: 'drawArrow 1.5s cubic-bezier(0.4,0,0.2,1) forwards',
-              }}
-            />
-            {/* Arrowhead */}
-            <polygon
-              points="92,15 100,20 90,25"
-              fill="currentColor"
-              style={{
-                opacity: 0,
-                animation: 'fadeInArrowHead 0.5s 1.2s forwards',
-              }}
-            />
-          </svg>
-          <style>{`
-            @keyframes drawArrow {
-              to { stroke-dashoffset: 0; }
-            }
-            @keyframes fadeInArrowHead {
-              to { opacity: 1; }
-            }
-          `}</style>
-        </div>,
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d={path}
+                stroke="currentColor"
+                strokeWidth="3"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  strokeDasharray: 2000,
+                  strokeDashoffset: 2000,
+                  animation: 'drawArrow 2.2s cubic-bezier(0.4,0,0.2,1) forwards',
+                }}
+              />
+              {/* Arrowhead at the end */}
+              <polygon
+                points={`${endX - 12},${endY - 8} ${endX},${endY} ${endX - 14},${endY + 8}`}
+                fill="currentColor"
+                style={{
+                  opacity: 0,
+                  animation: 'fadeInArrowHead 0.5s 1.8s forwards',
+                }}
+              />
+              <style>{`
+                @keyframes drawArrow {
+                  to { stroke-dashoffset: 0; }
+                }
+                @keyframes fadeInArrowHead {
+                  to { opacity: 1; }
+                }
+              `}</style>
+            </svg>
+          )
+        })(),
         document.body
       )}
     </div>
