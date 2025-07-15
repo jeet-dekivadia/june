@@ -22,6 +22,22 @@ const STATES: Record<State, State> = {
   error: "error",
 }
 
+// Typewriter animation hook
+function useTypewriter(text: string, delay: number = 40) {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    setDisplayed("");
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed((prev) => prev + text[i]);
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, delay);
+    return () => clearInterval(interval);
+  }, [text, delay]);
+  return displayed;
+}
+
 export function InputForm({ buttonCopy, ...props }: InputForm) {
   const [state, setState] = useState<State>(STATES.idle)
   const [error, setError] = useState<string>()
@@ -140,31 +156,25 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
       {/* Manifesto prompt with curved arrow */}
       {showManifestoPrompt && (
         <div className="absolute top-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-in slide-in-from-bottom-4 duration-700">
-          <div className="relative">
-            {/* Curved arrow SVG */}
+          <div className="relative flex flex-col items-center">
+            {/* Curved arrow SVG, visually points from button to text */}
             <svg
-              width="60"
-              height="40"
-              viewBox="0 0 60 40"
+              width="90"
+              height="60"
+              viewBox="0 0 90 60"
               className="text-slate-11 animate-bounce"
               style={{ animationDelay: "0.5s" }}
             >
-              <path d="M10 30 Q30 10 50 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
-              <path
-                d="M45 15 L50 20 L45 25"
-                stroke="currentColor"
-                strokeWidth="2"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M45 10 Q60 30 70 40 Q80 50 85 55" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+              <path d="M80 50 L85 55 L78 54" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <a
             href="/manifesto"
-            className="mt-2 text-sm text-slate-11 hover:text-slate-12 transition-colors duration-200 flex items-center gap-1 group"
+            className="mt-2 text-sm text-slate-11 hover:text-slate-12 transition-colors duration-200 flex items-center gap-1 group font-mono"
+            style={{ minHeight: 24 }}
           >
-            Check out our manifesto
+            <span style={{ whiteSpace: 'pre' }}>{useTypewriter("Check out our manifesto")}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </a>
         </div>
