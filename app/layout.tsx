@@ -70,7 +70,7 @@ export default function RootLayout({
             </div>
           </div>
           {/* CurvedLoop Marquee at the bottom of all pages */}
-          <div className="w-full flex justify-center items-end fixed left-0 bottom-0 z-50 pointer-events-none">
+          <div className="w-full flex justify-center fixed left-0 bottom-0 z-50 pointer-events-none pb-2">
             <CurvedLoop
               marqueeText="We ✦ don't ✦ Match ✦ We ✦ Introduce ✦"
               speed={5}
