@@ -27,10 +27,10 @@ export function WaitlistWrapper({ children }: PropsWithChildren) {
         <div className="flex flex-col gap-10">{children}</div>
       </div>
       <footer className="flex justify-between items-center w-full self-stretch px-8 py-3 text-sm bg-gray-12/[.07] overflow-hidden">
-        <p className="text-xs text-slate-10">© 2024 June. Just one match that matters.</p>
+        <p className="text-xs text-slate-10">© 2025 June. Just one match that matters.</p>
         <div className="flex items-center gap-4 text-xs text-slate-10">
-          <span>Reach out on</span>
-          <div className="flex items-center gap-3">
+          <span>Reach out on:</span>
+          <div className="flex items-center gap-2">
             <a
               href="https://x.com/jeetdekivadia"
               target="_blank"
