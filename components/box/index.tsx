@@ -7,12 +7,12 @@ export function WaitlistWrapper({ children, className }: PropsWithChildren & { c
   return (
     <div
       className={clsx(
-        "w-full mx-auto max-w-[800px] flex flex-col justify-center items-center bg-gray-1/85 pb-0 overflow-hidden rounded-2xl",
+        "w-full max-w-[1100px] mx-auto flex flex-col justify-center items-center bg-gray-1/85 pb-0 overflow-hidden rounded-2xl h-full min-h-0",
         "shadow-[0px_170px_48px_0px_rgba(18,_18,_19,_0.00),_0px_109px_44px_0px_rgba(18,_18,_19,_0.01),_0px_61px_37px_0px_rgba(18,_18,_19,_0.05),_0px_27px_27px_0px_rgba(18,_18,_19,_0.09),_0px_7px_15px_0px_rgba(18,_18,_19,_0.10)]",
         className
       )}
     >
-      <div className="flex flex-col items-center gap-2 flex-1 text-center w-full p-6 pb-2">
+      <div className="flex flex-col items-center gap-1 flex-1 text-center w-full p-4 pb-1 min-h-0">
         <div className="flex justify-center items-center mx-auto mb-2">
           <div className="w-28 h-28 flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-sm">
             <Image
@@ -25,7 +25,7 @@ export function WaitlistWrapper({ children, className }: PropsWithChildren & { c
             />
           </div>
         </div>
-        <div className="flex flex-col gap-4">{children}</div>
+        <div className="flex flex-col gap-2 w-full">{children}</div>
       </div>
       <footer className="flex justify-between items-center w-full self-stretch px-8 py-3 text-sm bg-gray-12/[.07] overflow-hidden">
         <p className="text-xs text-slate-10">© 2025 June. Just one match that matters.</p>
