@@ -69,15 +69,15 @@ export default function RootLayout({
               <main className="flex justify-center">{children}</main>
             </div>
           </div>
-          {/* CurvedLoop Marquee at the bottom of all pages */}
-          <div className="w-full flex justify-center fixed left-0 bottom-0 z-50 pointer-events-none pb-2">
+          {/* Footer with CurvedLoop Marquee at the bottom of all pages */}
+          <footer className="w-full flex justify-center items-center py-2 bg-transparent">
             <CurvedLoop
               marqueeText="We ✦ don't ✦ Match ✦ We ✦ Introduce ✦"
               speed={5}
               curveAmount={-400}
               interactive={false}
             />
-          </div>
+          </footer>
         </ThemeProvider>
       </body>
     </html>
