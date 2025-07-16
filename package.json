@@ -24,7 +24,7 @@
     "react-dom": "^19",
     "resend": "latest",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
     "@vercel/analytics": "latest"
   },
   "devDependencies": {
