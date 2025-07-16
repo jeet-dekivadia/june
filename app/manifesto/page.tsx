@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function Manifesto() {
   return (
-    <WaitlistWrapper maxWidthClass="max-w-[600px]">
+    <WaitlistWrapper>
       <div className="flex flex-col gap-10">
         <div className="text-slate-11 [&>p]:tracking-tight [&>p]:leading-[1.6] [&>p:not(:last-child)]:mb-3 text-pretty text-start">
           <p>
