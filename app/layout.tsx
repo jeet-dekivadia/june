@@ -64,7 +64,7 @@ export default function RootLayout({
             }}
           />
           <div className="max-w-screen-sm mx-auto w-full relative z-[1] flex flex-col min-h-screen">
-            <div className="px-5 gap-8 flex flex-col flex-1 py-[12vh]">
+            <div className="px-5 gap-8 flex flex-col flex-1 py-[6vh]">
               <Header />
               <main className="flex justify-center">{children}</main>
             </div>
