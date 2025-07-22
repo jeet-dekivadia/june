@@ -94,6 +94,10 @@ export function InputForm({ buttonCopy, ...props }: InputForm) {
           <input
             {...props}
             value={value}
+            placeholder="Enter your email to apply"
+            type="email"
+            name="email"
+            required
             className={clsx(
               "flex-1 text-sm pl-4 pr-28 py-2 h-11 bg-gray-11/5 cursor-text rounded-full text-gray-12 placeholder:text-gray-9 border border-gray-11/10 transition-all duration-500",
               isSubmitted && "opacity-0",

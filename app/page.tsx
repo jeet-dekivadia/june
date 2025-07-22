@@ -1,54 +1,27 @@
-import { InputForm } from "@/components/waitlist-form"
 import { WaitlistWrapper } from "@/components/box"
+import { CountdownTimer } from "@/components/countdown-timer"
+import { PremiumWaitlistModal } from "@/components/premium-waitlist-modal"
+import { HomeClient } from "@/components/home-client"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "June - Just one match that matters",
+  title: "June - Welcome to the Future of Dating",
   description:
-    "Dating apps are burning people out. June replaces endless swiping with one high-quality, AI-vetted connection.",
+    "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
   openGraph: {
     type: "website",
-    title: "June - Just one match that matters",
+    title: "June - Welcome to the Future of Dating",
     description:
-      "Dating apps are burning people out. June replaces endless swiping with one high-quality, AI-vetted connection.",
+      "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "June - Just one match that matters",
+    title: "June - Welcome to the Future of Dating",
     description:
-      "Dating apps are burning people out. June replaces endless swiping with one high-quality, AI-vetted connection.",
+      "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
   },
 }
 
 export default function Home() {
-  return (
-    <WaitlistWrapper>
-      {/* Heading */}
-      <div className="space-y-1">
-        <h1 className="text-2xl sm:text-3xl font-medium text-slate-12 whitespace-pre-wrap text-pretty">
-          Just one match that matters.
-        </h1>
-        <div className="text-slate-10 [&>p]:tracking-tight text-pretty">
-          <p>
-            Dating apps are burning people out. June replaces endless swiping with one high-quality, AI-vetted
-            connection.
-          </p>
-        </div>
-      </div>
-      {/* Form */}
-      <div className="px-1 flex flex-col w-full self-stretch">
-        <InputForm
-          buttonCopy={{
-            idle: "Join Waitlist",
-            success: "Welcome to June! 🎉",
-            loading: "Joining...",
-          }}
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          required
-        />
-      </div>
-    </WaitlistWrapper>
-  )
+  return <HomeClient />
 }

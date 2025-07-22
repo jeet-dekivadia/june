@@ -9,23 +9,27 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@paper-design/shaders-react": "latest",
     "@react-email/components": "latest",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "^2.46.1",
+    "@vercel/analytics": "latest",
     "autoprefixer": "^10.4.20",
     "basehub": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.6",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
     "next-themes": "latest",
     "react": "^19",
     "react-dom": "^19",
+    "react-phone-number-input": "^3.4.12",
     "resend": "latest",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7",
-    "@vercel/analytics": "latest"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^22",

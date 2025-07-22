@@ -1,6 +1,6 @@
-# June - Just one match that matters
+# June - Welcome to the Future of Dating
 
-A revolutionary dating app that replaces endless swiping with meaningful, AI-vetted connections.
+The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.
 
 ## Team
 

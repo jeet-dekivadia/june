@@ -4,7 +4,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { Geist } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { Header } from "@/components/header"
-import { MeshGradientComponent } from "@/components/mesh-gradient" // Using the original MeshGradientComponent
+import { MeshGradientComponent } from "@/components/mesh-gradient"
+import { FomoBanner } from "@/components/fomo-banner"
+import { VideoCornerPlayer } from "@/components/video-corner-player"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -20,10 +22,10 @@ export const viewport: Viewport = {
 export const metadata = {
   title: {
     template: "%s | June",
-    default: "June - Just one match that matters",
+    default: "June - Welcome to the Future of Dating",
   },
   description:
-    "Dating apps are burning people out. June replaces endless swiping with one high-quality, AI-vetted connection.",
+    "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
   openGraph: {
     type: "website",
     siteName: "June",
@@ -51,6 +53,7 @@ export default function RootLayout({
           defaultTheme="dark"
           forcedTheme="dark"
         >
+          {/* Original Mesh Gradient Background */}
           <MeshGradientComponent
             colors={["#8b5cf6", "#a855f7", "#c084fc", "#ddd6fe"]} // Purple gradient colors
             speed={2.5}
@@ -63,11 +66,15 @@ export default function RootLayout({
               height: "100%",
             }}
           />
-          <div className="max-w-screen-sm mx-auto w-full relative z-[1] flex flex-col min-h-screen">
-            <div className="px-5 gap-8 flex flex-col flex-1 py-[12vh]">
-              <Header />
-              <main className="flex justify-center">{children}</main>
-            </div>
+
+          {/* FOMO Banner */}
+          <FomoBanner />
+
+          {/* Video Corner Player */}
+          <VideoCornerPlayer />
+
+          <div className="w-full relative z-20 flex flex-col min-h-screen">
+            <main className="flex justify-center items-center min-h-screen">{children}</main>
           </div>
         </ThemeProvider>
         <Analytics />

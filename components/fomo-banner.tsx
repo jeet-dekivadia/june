@@ -1,0 +1,49 @@
+'use client'
+
+import { motion } from 'framer-motion'
+
+export function FomoBanner() {
+
+  // Real profile photos from public folder
+  const profilePhotos = [
+    { id: 1, name: 'Adriana', src: '/adriana.jpg' },
+    { id: 2, name: 'Aija', src: '/aija.jpg' },
+    { id: 3, name: 'Henry', src: '/henry.webp' },
+    { id: 4, name: 'Megan', src: '/megan.webp' },
+    { id: 5, name: 'Nas', src: '/nas.jpg' }
+  ]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40"
+    >
+      <div className="flex items-center gap-3 bg-black/30 backdrop-blur-lg rounded-full px-4 py-2 border border-white/20">
+        {/* Profile Photos */}
+        <div className="flex items-center -space-x-2">
+          {profilePhotos.map((photo, index) => (
+            <motion.div
+              key={photo.id}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
+              className="relative"
+            >
+              <img
+                src={photo.src}
+                alt={photo.name}
+                className="w-7 h-7 rounded-full border-2 border-white/30 object-cover"
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Text */}
+        <span className="text-white text-sm font-medium drop-shadow-sm">
+          Join 5000+ people on June
+        </span>
+      </div>
+    </motion.div>
+  )
+} 
