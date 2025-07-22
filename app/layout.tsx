@@ -67,8 +67,7 @@ export default function RootLayout({
             }}
           />
 
-          {/* FOMO Banner */}
-          <FomoBanner />
+
 
           {/* Video Corner Player */}
           <VideoCornerPlayer />
