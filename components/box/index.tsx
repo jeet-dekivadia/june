@@ -16,7 +16,7 @@ export function WaitlistWrapper({ children }: PropsWithChildren) {
           <div className="w-32 h-32 flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-sm">
             <Image
               src="/images/june-logo.png"
-              alt="June - Just one match that matters"
+              alt="June - No Swiping. No Efforts. Just the one date that matters"
               width={120}
               height={120}
               className="w-full h-full object-cover"
