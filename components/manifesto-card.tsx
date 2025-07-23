@@ -3,6 +3,7 @@
 import clsx from "clsx"
 import Image from "next/image"
 import { CardWithNav } from "./card-with-nav"
+import { ExternalLink } from "lucide-react"
 
 export function ManifestoCard() {
   return (
@@ -10,18 +11,18 @@ export function ManifestoCard() {
       <div
       className={clsx(
         "w-full mx-auto max-w-[450px] flex flex-col justify-center items-center pb-0 overflow-hidden rounded-3xl",
-        // Much more transparent dark glass effect with black tint
-        "bg-black/5 backdrop-blur-lg border border-black/20",
+        // Ultra-transparent light beige glass effect
+        "bg-amber-50/3 backdrop-blur-md border border-amber-100/15",
         // Enhanced shadows for depth
         "shadow-[0px_170px_48px_0px_rgba(0,_0,_0,_0.15),_0px_109px_44px_0px_rgba(0,_0,_0,_0.12),_0px_61px_37px_0px_rgba(0,_0,_0,_0.08),_0px_27px_27px_0px_rgba(0,_0,_0,_0.06),_0px_7px_15px_0px_rgba(0,_0,_0,_0.04)]",
-        // Subtle inner dark glow
-        "before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-b before:from-black/5 before:to-transparent before:pointer-events-none",
+        // Subtle inner beige glow
+        "before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-b before:from-amber-50/2 before:to-transparent before:pointer-events-none",
         "relative"
       )}
     >
       <div className="flex flex-col items-center gap-4 flex-1 text-center w-full p-8 pb-6">
         <div className="flex justify-center items-center mx-auto">
-          <div className="w-24 h-24 flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-black/10 to-gray-800/10 backdrop-blur-sm">
+          <div className="w-24 h-24 flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-amber-100/8 to-amber-200/8 backdrop-blur-sm">
             <Image
               src="/images/june-logo.png"
               alt="June - Welcome to the Future of Dating"
@@ -53,7 +54,7 @@ export function ManifestoCard() {
           </div>
 
           {/* Vision Statement */}
-          <div className="bg-black/10 backdrop-blur-sm border border-black/20 rounded-2xl p-4">
+          <div className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4">
             <p className="text-sm text-white/90 drop-shadow-sm italic">
               "The future of dating isn't about more options—it's about the right option."
             </p>
@@ -71,6 +72,31 @@ export function ManifestoCard() {
               Join the waitlist. Be part of the revolution.
             </p>
           </div>
+        </div>
+      </div>
+      
+      {/* Footer - Single line with copyright and social links */}
+      <div className="w-full px-8 py-4 border-t border-amber-100/10 bg-amber-50/2">
+        <div className="flex items-center justify-center gap-2 text-xs text-white/80">
+          <span>© 2025 June. The future of dating.</span>
+          <span>•</span>
+          <span>Connect with us:</span>
+          <a
+            href="https://x.com/jeetdekivadia"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:text-white/100 transition-colors duration-200"
+          >
+            X <ExternalLink className="w-2.5 h-2.5" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/jeetdekivadia/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:text-white/100 transition-colors duration-200"
+          >
+            LinkedIn <ExternalLink className="w-2.5 h-2.5" />
+          </a>
         </div>
       </div>
       </div>

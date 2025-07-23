@@ -58,8 +58,8 @@ export function CountdownTimer() {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="text-center">
-        <p className="text-sm text-white/90 font-medium mb-1 drop-shadow-sm">Launching in</p>
-        <p className="text-xs text-white/80 drop-shadow-sm">August 18, 2025 • National Couples Day</p>
+        <p className="text-sm text-white/90 font-medium mb-1 drop-shadow-sm">Coming soon...</p>
+        <p className="text-xs text-white/80 drop-shadow-sm"></p>
       </div>
       
       <div className="flex items-center justify-center gap-3 sm:gap-4">

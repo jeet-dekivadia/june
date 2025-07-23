@@ -52,7 +52,7 @@ export function HomeClient() {
             <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
           </p>
           <p className="text-xs text-white/80 drop-shadow-sm">
-            Early applications get priority access. Rolling out in batches.
+            
           </p>
         </div>
         </WaitlistWrapper>

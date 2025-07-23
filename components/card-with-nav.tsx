@@ -21,29 +21,35 @@ export function CardWithNav({ children }: CardWithNavProps) {
 
   return (
     <div className="relative">
-      {/* Navigation Toggle - Enhanced Styling */}
+      {/* Navigation Toggle - Ultra Smooth Animation */}
       <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
-        <nav className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl">
-          <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-2xl p-2 flex relative items-center shadow-lg backdrop-blur-sm">
-            {/* Enhanced animated background indicator */}
+        <nav className="bg-black/30 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl">
+          <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-3xl p-2 flex relative items-center shadow-lg backdrop-blur-sm">
+            {/* Ultra-smooth animated background indicator */}
             <motion.div
-              className="absolute transition-all duration-300 ease-out h-8 rounded-xl bg-gradient-to-r from-white/40 to-white/30 backdrop-blur-lg border border-white/50 shadow-lg"
+              className="absolute h-8 rounded-2xl bg-gradient-to-r from-white/40 to-white/30 backdrop-blur-lg border border-white/50 shadow-lg"
               style={{
                 width: `85px`,
-                left: `calc((${activeIndex} * 85px) + 8px)`,
+                left: `8px`,
               }}
               initial={false}
               animate={{
-                left: `calc((${activeIndex} * 85px) + 8px)`,
+                x: activeIndex * 85,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 30,
+                mass: 0.8,
               }}
             />
 
-            {/* Navigation items with improved styling */}
+            {/* Navigation items with smooth hover transitions */}
             {navItems.map(({ href, title }) => (
               <Link
                 key={href}
                 href={href}
-                className={`relative text-sm font-semibold py-2 px-4 transition-all duration-300 text-white w-[85px] flex items-center justify-center drop-shadow-lg z-10 rounded-xl
+                className={`relative text-sm font-semibold py-2 px-4 text-white w-[85px] flex items-center justify-center drop-shadow-lg z-10 rounded-2xl transition-opacity duration-200 ease-out
                   ${pathname === href ? 'opacity-100 font-bold text-white' : 'opacity-80 hover:opacity-95'}`}
                 {...(href === '/manifesto' ? { 'data-manifesto-btn': true } : {})}
               >
