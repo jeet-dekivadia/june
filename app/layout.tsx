@@ -55,7 +55,7 @@ export default function RootLayout({
         >
           {/* Original Mesh Gradient Background */}
           <MeshGradientComponent
-            colors={["#8b5cf6", "#a855f7", "#c084fc", "#ddd6fe"]} // Purple gradient colors
+            colors={["#F5E6D3", "#E8D5C2", "#D4B8A6", "#C19A7B"]} // Beige, cream, and skin tone colors
             speed={2.5}
             style={{
               position: "fixed",

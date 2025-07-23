@@ -21,30 +21,30 @@ export function CardWithNav({ children }: CardWithNavProps) {
 
   return (
     <div className="relative">
-      {/* Navigation Toggle - Inside Card */}
-      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-10">
-        <nav className="bg-black/20 rounded-full border border-white/20">
-          <div className="bg-black/10 rounded-full p-1 flex relative items-center shadow-lg backdrop-blur-sm">
-            {/* Animated background indicator */}
+      {/* Navigation Toggle - Enhanced Styling */}
+      <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
+        <nav className="bg-black/30 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl">
+          <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-2xl p-2 flex relative items-center shadow-lg backdrop-blur-sm">
+            {/* Enhanced animated background indicator */}
             <motion.div
-              className="absolute transition-all duration-200 ease-in-out h-6 rounded-full bg-white/30 backdrop-blur-sm border border-white/40"
+              className="absolute transition-all duration-300 ease-out h-8 rounded-xl bg-gradient-to-r from-white/40 to-white/30 backdrop-blur-lg border border-white/50 shadow-lg"
               style={{
-                width: `75px`,
-                left: `calc((${activeIndex} * 75px) + 4px)`,
+                width: `85px`,
+                left: `calc((${activeIndex} * 85px) + 8px)`,
               }}
               initial={false}
               animate={{
-                left: `calc((${activeIndex} * 75px) + 4px)`,
+                left: `calc((${activeIndex} * 85px) + 8px)`,
               }}
             />
 
-            {/* Navigation items */}
+            {/* Navigation items with improved styling */}
             {navItems.map(({ href, title }) => (
               <Link
                 key={href}
                 href={href}
-                className={`relative text-xs font-medium py-2 px-4 transition-all duration-300 text-white w-[75px] flex items-center justify-center drop-shadow-sm z-10
-                  ${pathname === href ? 'opacity-100 font-bold text-white' : 'opacity-70 hover:opacity-90'}`}
+                className={`relative text-sm font-semibold py-2 px-4 transition-all duration-300 text-white w-[85px] flex items-center justify-center drop-shadow-lg z-10 rounded-xl
+                  ${pathname === href ? 'opacity-100 font-bold text-white' : 'opacity-80 hover:opacity-95'}`}
                 {...(href === '/manifesto' ? { 'data-manifesto-btn': true } : {})}
               >
                 {title}
