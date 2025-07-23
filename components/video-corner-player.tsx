@@ -3,10 +3,12 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useWaitlistCount } from '@/hooks/use-waitlist-count'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export function VideoCornerPlayer() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { count, isLoading } = useWaitlistCount()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (videoRef.current) {
@@ -17,6 +19,11 @@ export function VideoCornerPlayer() {
       })
     }
   }, [])
+
+  // Don't render video on mobile devices
+  if (isMobile) {
+    return null
+  }
 
   return (
     <>
