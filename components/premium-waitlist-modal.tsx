@@ -893,33 +893,39 @@ export function PremiumWaitlistModal({ isOpen, onClose, inline = false }: Waitli
 
   if (!isOpen) return null
 
-  if (inline) {
-
-    return modalContent
-
-  }
-
   return (
 
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${montserrat.className}`} >
+    <>
 
-      <motion.div
+      {inline ? (
 
-        initial={{ opacity: 0 }}
+        modalContent
 
-        animate={{ opacity: 1 }}
+      ) : (
 
-        exit={{ opacity: 0 }}
+        <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${montserrat.className}`}>
 
-        className="absolute inset-0 bg-[rgba(30,25,20,0.3)] backdrop-blur-2xl"
+          <motion.div
 
-        onClick={handleClose}
+            initial={{ opacity: 0 }}
 
-      />
+            animate={{ opacity: 1 }}
 
-      {modalContent}
+            exit={{ opacity: 0 }}
 
-    </div>
+            className="absolute inset-0 bg-[rgba(30,25,20,0.3)] backdrop-blur-2xl"
+
+            onClick={handleClose}
+
+          />
+
+          {modalContent}
+
+        </div>
+
+      )}
+
+    </>
 
   )
 
