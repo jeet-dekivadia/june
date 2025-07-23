@@ -20,9 +20,9 @@ export function CardWithNav({ children }: CardWithNavProps) {
   const activeIndex = navItems.findIndex(item => item.href === pathname)
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
-      {/* Navigation Toggle - Positioned above the centered card */}
-      <div className="absolute top-[calc(50vh-15vh-4rem)] left-1/2 transform -translate-x-1/2 z-30">
+    <div className="relative">
+      {/* Navigation Toggle - Ultra Smooth Animation */}
+      <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
         <nav className="bg-black/30 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl">
           <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-3xl p-2 flex relative items-center shadow-lg backdrop-blur-sm">
             {/* Ultra-smooth animated background indicator */}
@@ -60,12 +60,8 @@ export function CardWithNav({ children }: CardWithNavProps) {
         </nav>
       </div>
 
-      {/* Card Content - Centered and 25% of viewport */}
-      <div className="w-[25vw] h-[25vh] flex items-center justify-center">
-        <div className="w-full h-full">
-          {children}
-        </div>
-      </div>
+      {/* Card Content */}
+      {children}
     </div>
   )
 } 
