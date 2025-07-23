@@ -1,19 +1,12 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useWaitlistCount } from '@/hooks/use-waitlist-count'
-import { useIsMobile } from '@/hooks/use-mobile'
 
 export function VideoCornerPlayer() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { count, isLoading } = useWaitlistCount()
-  const [mounted, setMounted] = useState(false)
-  const isMobile = useIsMobile()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     if (videoRef.current) {
@@ -24,9 +17,6 @@ export function VideoCornerPlayer() {
       })
     }
   }, [])
-
-  // Don't render anything until mounted to prevent hydration mismatch
-  if (!mounted || isMobile) return null
 
   return (
     <>
