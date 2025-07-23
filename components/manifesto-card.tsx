@@ -24,7 +24,7 @@ export function ManifestoCard() {
         <div className="flex justify-center items-center mx-auto">
           <div className="w-24 h-24 flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-amber-100/8 to-amber-200/8 backdrop-blur-sm">
             <Image
-              src="/images/june-logo.png"
+              src="/junelogo.png"
               alt="June - Welcome to the Future of Dating"
               width={80}
               height={80}
