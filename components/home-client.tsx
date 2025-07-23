@@ -5,19 +5,10 @@ import { WaitlistWrapper } from "@/components/box"
 import { CountdownTimer } from "@/components/countdown-timer"
 import { PremiumWaitlistModal } from "@/components/premium-waitlist-modal"
 import { CardWithNav } from "@/components/card-with-nav"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { MobileHomeLayout } from "@/components/mobile-home-layout"
 
 export function HomeClient() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const isMobile = useIsMobile()
 
-  // Show mobile-specific layout for mobile devices
-  if (isMobile) {
-    return <MobileHomeLayout />
-  }
-
-  // Desktop layout remains unchanged
   return (
     <>
       <CardWithNav>

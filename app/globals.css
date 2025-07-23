@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Prevent scrolling on mobile when using the mobile layout */
-@media (max-width: 767px) {
-  html, body {
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for mobile */
-    overflow: hidden;
-  }
-  
-  /* Ensure the main container uses the full height */
-  #__next {
-    height: 100%;
-  }
-}
-
-/* Ensure smooth rendering on mobile to prevent hydration issues */
-@media (max-width: 767px) {
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
 :root {
   --header-height: 64px;
 
