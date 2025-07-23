@@ -2,10 +2,40 @@
 
 import clsx from "clsx"
 import Image from "next/image"
+import { useState } from "react"
 import { CardWithNav } from "./card-with-nav"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, X } from "lucide-react"
 
 export function ManifestoCard() {
+  const [showTeamModal, setShowTeamModal] = useState(false)
+
+  const teamMembers = [
+    {
+      name: "Aija Mayrock",
+      role: "Chief Executive Officer",
+      linkedin: "https://www.linkedin.com/in/aija-mayrock-a364a2b5/",
+      image: "/aija.jpg"
+    },
+    {
+      name: "Nuseir Yasin", 
+      role: "Chief Marketing Officer",
+      linkedin: "https://www.linkedin.com/in/nyassin/",
+      image: "/nas.jpg"
+    },
+    {
+      name: "Jeet Dekivadia",
+      role: "Chief Technology Officer", 
+      linkedin: "https://www.linkedin.com/in/jeetdekivadia/",
+      image: "/henry.webp"
+    },
+    {
+      name: "Kartik Bihani",
+      role: "Chief Product Officer",
+      linkedin: "https://www.linkedin.com/in/kbihani/",
+      image: "/megan.webp"
+    }
+  ]
+
   return (
     <CardWithNav>
       <div
@@ -47,14 +77,14 @@ export function ManifestoCard() {
               <p className="drop-shadow-sm">
                 We're building June to replace endless swiping with meaningful connections powered by advanced AI.
               </p>
-              <p className="drop-shadow-sm">
-                <strong className="text-white">One match. One conversation. One chance to find love.</strong>
-              </p>
             </div>
           </div>
 
-          {/* Vision Statement */}
-          <div className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4">
+          {/* Vision Statement - Clickable */}
+          <div 
+            onClick={() => setShowTeamModal(true)}
+            className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-amber-50/8 hover:border-amber-100/30 hover:shadow-lg"
+          >
             <p className="text-sm text-white/90 drop-shadow-sm italic">
               "The future of dating isn't about more options—it's about the right option."
             </p>
@@ -65,41 +95,68 @@ export function ManifestoCard() {
 
           {/* Launch Info */}
           <div className="space-y-2">
-            <p className="text-sm text-white/90 drop-shadow-sm">
-              <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
-            </p>
             <p className="text-xs text-white/80 drop-shadow-sm">
-              Join the waitlist. Be part of the revolution.
+              Join the waitlist. Be part of the Future.
             </p>
           </div>
         </div>
       </div>
-      
-      {/* Footer - Single line with copyright and social links */}
-      <div className="w-full px-8 py-4 border-t border-amber-100/10 bg-amber-50/2">
-        <div className="flex items-center justify-center gap-2 text-xs text-white/80">
-          <span>© 2025 June. The future of dating.</span>
-          <span>•</span>
-          <span>Connect with us:</span>
-          <a
-            href="https://x.com/jeetdekivadia"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:text-white/100 transition-colors duration-200"
-          >
-            X <ExternalLink className="w-2.5 h-2.5" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/jeetdekivadia/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:text-white/100 transition-colors duration-200"
-          >
-            LinkedIn <ExternalLink className="w-2.5 h-2.5" />
-          </a>
+      </div>
+
+      {/* Team Modal */}
+      {showTeamModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-lg">
+          <div className="relative bg-white/[0.03] backdrop-blur-3xl border border-white/[0.8] rounded-3xl p-8 max-w-md w-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-white/[0.07] before:via-white/[0.02] before:to-transparent before:pointer-events-none">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowTeamModal(false)}
+              className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-white drop-shadow-lg">
+                Meet the Team
+              </h3>
+            </div>
+
+            {/* Team Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {teamMembers.map((member, index) => (
+                <div key={index} className="flex flex-col items-center text-center">
+                  {/* Profile Image */}
+                  <div className="w-16 h-16 mb-3 rounded-full overflow-hidden border-2 border-white/30 shadow-lg">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Name and Role */}
+                  <div className="space-y-1">
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-sm font-medium text-white hover:text-white/80 transition-colors duration-200"
+                    >
+                      {member.name}
+                    </a>
+                    <p className="text-xs text-white/70">
+                      {member.role}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-      </div>
+      )}
     </CardWithNav>
   )
 } 

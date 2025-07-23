@@ -19,7 +19,7 @@ export function FomoBanner() {
       animate={{ opacity: 1, y: 0 }}
       className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40"
     >
-      <div className="flex items-center gap-3 bg-black/30 backdrop-blur-lg rounded-full px-4 py-2 border border-white/20">
+      <div className="flex items-center gap-3 bg-black/70 backdrop-blur-lg rounded-full px-4 py-2 border border-white/80">
         {/* Profile Photos */}
         <div className="flex items-center -space-x-2">
           {profilePhotos.map((photo, index) => (
@@ -38,11 +38,6 @@ export function FomoBanner() {
             </motion.div>
           ))}
         </div>
-
-        {/* Text */}
-        <span className="text-white text-sm font-medium drop-shadow-sm">
-          Join 5000+ people on June
-        </span>
       </div>
     </motion.div>
   )

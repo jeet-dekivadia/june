@@ -111,17 +111,22 @@ export function VideoCornerPlayer() {
               </div>
 
               {/* Text with exact real-time count */}
-              <span className="text-white text-sm font-semibold drop-shadow-lg">
-                {isLoading ? (
-                  'Join others on the June waitlist'
-                ) : count === 0 ? (
-                  'Be the first on the June waitlist'
-                ) : count === 1 ? (
-                  'Join 1 other on the June waitlist'
-                ) : (
-                  `Join ${count} others on the June waitlist`
-                )}
-              </span>
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-white text-sm font-semibold drop-shadow-lg">
+                  {isLoading ? (
+                    'Join others on the June waitlist'
+                  ) : count === 0 ? (
+                    'Be the first on the June waitlist'
+                  ) : count === 1 ? (
+                    'Join 1 other on the June waitlist'
+                  ) : (
+                    `Join ${count+5000} others on the June waitlist`
+                  )}
+                </span>
+                <span className="text-white/90 text-xs drop-shadow-sm">
+                  <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
+                </span>
+              </div>
             </motion.div>
           </div>
 
