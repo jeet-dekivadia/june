@@ -5,6 +5,7 @@ import Link from 'next/link'
 import clsx from "clsx"
 import { motion } from 'framer-motion'
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useState, useEffect } from 'react'
 
 interface CardWithNavProps {
   children: React.ReactNode
@@ -12,6 +13,7 @@ interface CardWithNavProps {
 
 export function CardWithNav({ children }: CardWithNavProps) {
   const pathname = usePathname()
+  const [mounted, setMounted] = useState(false)
   
   const navItems = [
     { href: "/", title: "Apply" },
@@ -19,12 +21,15 @@ export function CardWithNav({ children }: CardWithNavProps) {
   ]
 
   const activeIndex = navItems.findIndex(item => item.href === pathname)
-
   const isMobile = useIsMobile()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <div className="relative">
-      {!isMobile && (
+      {mounted && !isMobile && (
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
           <nav className="bg-black/30 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl">
             <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-3xl p-2 flex relative items-center shadow-lg backdrop-blur-sm">
@@ -63,6 +68,7 @@ export function CardWithNav({ children }: CardWithNavProps) {
           </nav>
         </div>
       )}
+
       {/* Card Content */}
       {children}
     </div>
