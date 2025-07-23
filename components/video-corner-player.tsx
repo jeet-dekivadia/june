@@ -1,22 +1,41 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useWaitlistCount } from '@/hooks/use-waitlist-count'
 
 export function VideoCornerPlayer() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { count, isLoading } = useWaitlistCount()
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    if (videoRef.current) {
+    // Check if device is mobile
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                            window.innerWidth <= 768 ||
+                            ('ontouchstart' in window)
+      setIsMobile(isMobileDevice)
+    }
+
+    // Check on mount
+    checkMobile()
+
+    // Check on resize
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    // Only play video if not mobile
+    if (videoRef.current && !isMobile) {
       videoRef.current.muted = true
       videoRef.current.play().catch(() => {
         // Auto-play failed, which is normal on some browsers
         console.log('Auto-play blocked, video will play when user interacts')
       })
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <>
@@ -32,19 +51,26 @@ export function VideoCornerPlayer() {
       >
         {/* Video Container - Exactly 90% of screen */}
         <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
-          {/* Video Element */}
-          <video
-            ref={videoRef}
-            loop
-            muted
-            autoPlay
-            playsInline
-            className="w-full h-full object-cover"
-            style={{ pointerEvents: 'none' }} // Completely disable interaction
-          >
-            <source src="/junebgvideoad.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {/* Conditional Video Element - Only render if not mobile */}
+          {!isMobile && (
+            <video
+              ref={videoRef}
+              loop
+              muted
+              autoPlay
+              playsInline
+              className="w-full h-full object-cover"
+              style={{ pointerEvents: 'none' }} // Completely disable interaction
+            >
+              <source src="/junebgvideoad.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
+
+          {/* Fallback background for mobile devices */}
+          {isMobile && (
+            <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900" />
+          )}
 
           {/* Transparent Black-White Glass Overlay for Apple-like Effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-gray-900/25 to-black/35" />
@@ -116,4 +142,4 @@ export function VideoCornerPlayer() {
       </motion.div>
     </>
   )
-} 
+}
