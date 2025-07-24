@@ -40,7 +40,7 @@ export function ManifestoCard() {
     <CardWithNav>
       <div
       className={clsx(
-        "w-full mx-auto max-w-[400px] flex flex-col justify-center items-center pb-0 overflow-hidden rounded-3xl",
+        "w-full mx-auto max-w-[350px] flex flex-col justify-center items-center pb-0 overflow-hidden rounded-3xl",
         // Ultra-transparent light beige glass effect
         "bg-amber-50/3 backdrop-blur-md border border-amber-100/15",
         // Enhanced shadows for depth
