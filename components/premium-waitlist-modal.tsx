@@ -37,22 +37,213 @@ const initialFormData: FormData = {
 
 type Step = 'personal' | 'social' | 'confirmation' | 'success'
 
+// Comprehensive list of 150+ country codes with names
 const countryOptions = [
-  { code: '+1' },
-  { code: '+44' },
-  { code: '+33' },
-  { code: '+49' },
-  { code: '+39' },
-  { code: '+34' },
-  { code: '+31' },
-  { code: '+61' },
-  { code: '+81' },
-  { code: '+82' },
-  { code: '+65' },
-  { code: '+91' },
-  { code: '+86' },
-  { code: '+55' },
-  { code: '+52' },
+  { code: '+1', name: 'United States / Canada' },
+  { code: '+7', name: 'Russia / Kazakhstan' },
+  { code: '+20', name: 'Egypt' },
+  { code: '+27', name: 'South Africa' },
+  { code: '+30', name: 'Greece' },
+  { code: '+31', name: 'Netherlands' },
+  { code: '+32', name: 'Belgium' },
+  { code: '+33', name: 'France' },
+  { code: '+34', name: 'Spain' },
+  { code: '+36', name: 'Hungary' },
+  { code: '+39', name: 'Italy' },
+  { code: '+40', name: 'Romania' },
+  { code: '+41', name: 'Switzerland' },
+  { code: '+43', name: 'Austria' },
+  { code: '+44', name: 'United Kingdom' },
+  { code: '+45', name: 'Denmark' },
+  { code: '+46', name: 'Sweden' },
+  { code: '+47', name: 'Norway' },
+  { code: '+48', name: 'Poland' },
+  { code: '+49', name: 'Germany' },
+  { code: '+51', name: 'Peru' },
+  { code: '+52', name: 'Mexico' },
+  { code: '+53', name: 'Cuba' },
+  { code: '+54', name: 'Argentina' },
+  { code: '+55', name: 'Brazil' },
+  { code: '+56', name: 'Chile' },
+  { code: '+57', name: 'Colombia' },
+  { code: '+58', name: 'Venezuela' },
+  { code: '+60', name: 'Malaysia' },
+  { code: '+61', name: 'Australia' },
+  { code: '+62', name: 'Indonesia' },
+  { code: '+63', name: 'Philippines' },
+  { code: '+64', name: 'New Zealand' },
+  { code: '+65', name: 'Singapore' },
+  { code: '+66', name: 'Thailand' },
+  { code: '+81', name: 'Japan' },
+  { code: '+82', name: 'South Korea' },
+  { code: '+84', name: 'Vietnam' },
+  { code: '+86', name: 'China' },
+  { code: '+90', name: 'Turkey' },
+  { code: '+91', name: 'India' },
+  { code: '+92', name: 'Pakistan' },
+  { code: '+93', name: 'Afghanistan' },
+  { code: '+94', name: 'Sri Lanka' },
+  { code: '+95', name: 'Myanmar' },
+  { code: '+98', name: 'Iran' },
+  { code: '+212', name: 'Morocco' },
+  { code: '+213', name: 'Algeria' },
+  { code: '+216', name: 'Tunisia' },
+  { code: '+218', name: 'Libya' },
+  { code: '+220', name: 'Gambia' },
+  { code: '+221', name: 'Senegal' },
+  { code: '+222', name: 'Mauritania' },
+  { code: '+223', name: 'Mali' },
+  { code: '+224', name: 'Guinea' },
+  { code: '+225', name: 'Ivory Coast' },
+  { code: '+226', name: 'Burkina Faso' },
+  { code: '+227', name: 'Niger' },
+  { code: '+228', name: 'Togo' },
+  { code: '+229', name: 'Benin' },
+  { code: '+230', name: 'Mauritius' },
+  { code: '+231', name: 'Liberia' },
+  { code: '+232', name: 'Sierra Leone' },
+  { code: '+233', name: 'Ghana' },
+  { code: '+234', name: 'Nigeria' },
+  { code: '+235', name: 'Chad' },
+  { code: '+236', name: 'Central African Republic' },
+  { code: '+237', name: 'Cameroon' },
+  { code: '+238', name: 'Cape Verde' },
+  { code: '+239', name: 'São Tomé and Príncipe' },
+  { code: '+240', name: 'Equatorial Guinea' },
+  { code: '+241', name: 'Gabon' },
+  { code: '+242', name: 'Republic of the Congo' },
+  { code: '+243', name: 'Democratic Republic of the Congo' },
+  { code: '+244', name: 'Angola' },
+  { code: '+245', name: 'Guinea-Bissau' },
+  { code: '+246', name: 'British Indian Ocean Territory' },
+  { code: '+248', name: 'Seychelles' },
+  { code: '+249', name: 'Sudan' },
+  { code: '+250', name: 'Rwanda' },
+  { code: '+251', name: 'Ethiopia' },
+  { code: '+252', name: 'Somalia' },
+  { code: '+253', name: 'Djibouti' },
+  { code: '+254', name: 'Kenya' },
+  { code: '+255', name: 'Tanzania' },
+  { code: '+256', name: 'Uganda' },
+  { code: '+257', name: 'Burundi' },
+  { code: '+258', name: 'Mozambique' },
+  { code: '+260', name: 'Zambia' },
+  { code: '+261', name: 'Madagascar' },
+  { code: '+262', name: 'Réunion' },
+  { code: '+263', name: 'Zimbabwe' },
+  { code: '+264', name: 'Namibia' },
+  { code: '+265', name: 'Malawi' },
+  { code: '+266', name: 'Lesotho' },
+  { code: '+267', name: 'Botswana' },
+  { code: '+268', name: 'Eswatini' },
+  { code: '+269', name: 'Comoros' },
+  { code: '+290', name: 'Saint Helena' },
+  { code: '+291', name: 'Eritrea' },
+  { code: '+297', name: 'Aruba' },
+  { code: '+298', name: 'Faroe Islands' },
+  { code: '+299', name: 'Greenland' },
+  { code: '+350', name: 'Gibraltar' },
+  { code: '+351', name: 'Portugal' },
+  { code: '+352', name: 'Luxembourg' },
+  { code: '+353', name: 'Ireland' },
+  { code: '+354', name: 'Iceland' },
+  { code: '+355', name: 'Albania' },
+  { code: '+356', name: 'Malta' },
+  { code: '+357', name: 'Cyprus' },
+  { code: '+358', name: 'Finland' },
+  { code: '+359', name: 'Bulgaria' },
+  { code: '+370', name: 'Lithuania' },
+  { code: '+371', name: 'Latvia' },
+  { code: '+372', name: 'Estonia' },
+  { code: '+373', name: 'Moldova' },
+  { code: '+374', name: 'Armenia' },
+  { code: '+375', name: 'Belarus' },
+  { code: '+376', name: 'Andorra' },
+  { code: '+377', name: 'Monaco' },
+  { code: '+378', name: 'San Marino' },
+  { code: '+380', name: 'Ukraine' },
+  { code: '+381', name: 'Serbia' },
+  { code: '+382', name: 'Montenegro' },
+  { code: '+383', name: 'Kosovo' },
+  { code: '+385', name: 'Croatia' },
+  { code: '+386', name: 'Slovenia' },
+  { code: '+387', name: 'Bosnia and Herzegovina' },
+  { code: '+389', name: 'North Macedonia' },
+  { code: '+420', name: 'Czech Republic' },
+  { code: '+421', name: 'Slovakia' },
+  { code: '+423', name: 'Liechtenstein' },
+  { code: '+500', name: 'Falkland Islands' },
+  { code: '+501', name: 'Belize' },
+  { code: '+502', name: 'Guatemala' },
+  { code: '+503', name: 'El Salvador' },
+  { code: '+504', name: 'Honduras' },
+  { code: '+505', name: 'Nicaragua' },
+  { code: '+506', name: 'Costa Rica' },
+  { code: '+507', name: 'Panama' },
+  { code: '+508', name: 'Saint Pierre and Miquelon' },
+  { code: '+509', name: 'Haiti' },
+  { code: '+590', name: 'Guadeloupe' },
+  { code: '+591', name: 'Bolivia' },
+  { code: '+592', name: 'Guyana' },
+  { code: '+593', name: 'Ecuador' },
+  { code: '+594', name: 'French Guiana' },
+  { code: '+595', name: 'Paraguay' },
+  { code: '+596', name: 'Martinique' },
+  { code: '+597', name: 'Suriname' },
+  { code: '+598', name: 'Uruguay' },
+  { code: '+599', name: 'Curaçao' },
+  { code: '+670', name: 'East Timor' },
+  { code: '+672', name: 'Antarctica' },
+  { code: '+673', name: 'Brunei' },
+  { code: '+674', name: 'Nauru' },
+  { code: '+675', name: 'Papua New Guinea' },
+  { code: '+676', name: 'Tonga' },
+  { code: '+677', name: 'Solomon Islands' },
+  { code: '+678', name: 'Vanuatu' },
+  { code: '+679', name: 'Fiji' },
+  { code: '+680', name: 'Palau' },
+  { code: '+681', name: 'Wallis and Futuna' },
+  { code: '+682', name: 'Cook Islands' },
+  { code: '+683', name: 'Niue' },
+  { code: '+684', name: 'American Samoa' },
+  { code: '+685', name: 'Samoa' },
+  { code: '+686', name: 'Kiribati' },
+  { code: '+687', name: 'New Caledonia' },
+  { code: '+688', name: 'Tuvalu' },
+  { code: '+689', name: 'French Polynesia' },
+  { code: '+690', name: 'Tokelau' },
+  { code: '+691', name: 'Micronesia' },
+  { code: '+692', name: 'Marshall Islands' },
+  { code: '+850', name: 'North Korea' },
+  { code: '+852', name: 'Hong Kong' },
+  { code: '+853', name: 'Macau' },
+  { code: '+855', name: 'Cambodia' },
+  { code: '+856', name: 'Laos' },
+  { code: '+880', name: 'Bangladesh' },
+  { code: '+886', name: 'Taiwan' },
+  { code: '+960', name: 'Maldives' },
+  { code: '+961', name: 'Lebanon' },
+  { code: '+962', name: 'Jordan' },
+  { code: '+963', name: 'Syria' },
+  { code: '+964', name: 'Iraq' },
+  { code: '+965', name: 'Kuwait' },
+  { code: '+966', name: 'Saudi Arabia' },
+  { code: '+967', name: 'Yemen' },
+  { code: '+968', name: 'Oman' },
+  { code: '+970', name: 'Palestine' },
+  { code: '+971', name: 'United Arab Emirates' },
+  { code: '+972', name: 'Israel' },
+  { code: '+973', name: 'Bahrain' },
+  { code: '+974', name: 'Qatar' },
+  { code: '+975', name: 'Bhutan' },
+  { code: '+976', name: 'Mongolia' },
+  { code: '+977', name: 'Nepal' },
+  { code: '+992', name: 'Tajikistan' },
+  { code: '+993', name: 'Turkmenistan' },
+  { code: '+994', name: 'Azerbaijan' },
+  { code: '+995', name: 'Georgia' },
+  { code: '+996', name: 'Kyrgyzstan' },
+  { code: '+998', name: 'Uzbekistan' }
 ]
 
 // Purple Liquid Glass Luma Spinner Component
@@ -131,6 +322,48 @@ const PurpleLumaSpinner = () => {
   )
 }
 
+// Enhanced Progress Circles Component
+const ProgressCircles = ({ currentStep }: { currentStep: Step }) => {
+  const steps = ['personal', 'social', 'confirmation']
+  const currentIndex = steps.indexOf(currentStep)
+
+  return (
+    <div className="flex justify-center items-center gap-6 px-6 py-4">
+      {[1, 2, 3].map((step, index) => {
+        const isActive = index <= currentIndex
+        const isCurrent = index === currentIndex
+        
+        return (
+          <motion.div
+            key={step}
+            className={`relative w-12 h-12 rounded-full flex items-center justify-center font-medium text-sm transition-all duration-500 ${
+              isCurrent 
+                ? 'bg-gradient-to-br from-white/25 to-white/10 backdrop-blur-xl border-2 border-white/30 text-white shadow-2xl scale-110' 
+                : isActive
+                ? 'bg-white/15 backdrop-blur-sm border border-white/20 text-white/90'
+                : 'bg-white/8 backdrop-blur-sm border border-white/10 text-white/60'
+            }`}
+            animate={{
+              scale: isCurrent ? 1.1 : 1,
+              boxShadow: isCurrent ? '0 0 30px rgba(255, 255, 255, 0.3)' : '0 0 0px rgba(255, 255, 255, 0)'
+            }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+          >
+            {step}
+            {isCurrent && (
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400/20 via-pink-400/10 to-rose-400/20"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
+            )}
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
 export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [currentStep, setCurrentStep] = useState<Step>('personal')
   const [formData, setFormData] = useState<FormData>(initialFormData)
@@ -138,6 +371,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [error, setError] = useState<string>('')
   const [waitlistPosition, setWaitlistPosition] = useState<number>(0)
   const [isInitialLoading, setIsInitialLoading] = useState(false)
+  const [countryCodeInput, setCountryCodeInput] = useState('1')
   const supabase = createClient()
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -147,11 +381,13 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       setIsInitialLoading(true)
       const timer = setTimeout(() => {
         setIsInitialLoading(false)
-      }, 3000) // 3 seconds
+      }, 2000) // 2 seconds loading time
 
       return () => clearTimeout(timer)
     }
   }, [isOpen])
+
+
 
   const handleClose = () => {
     setCurrentStep('personal')
@@ -159,15 +395,122 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setError('')
     setWaitlistPosition(0)
     setIsInitialLoading(false)
+    setCountryCodeInput('1')
     onClose()
   }
 
-  const handleNext = () => {
+  // Enhanced validation functions
+  const validateName = (name: string) => {
+    return /^[a-zA-Z\s]+$/.test(name) // Only letters and spaces
+  }
+
+  const validateEmail = (email: string) => {
+    return email.includes('@') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  const checkEmailExists = async (email: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('waitlist')
+        .select('email')
+        .eq('email', email)
+        .limit(1)
+
+      if (error) throw error
+      return data && data.length > 0
+    } catch (error) {
+      console.error('Error checking email:', error)
+      return false
+    }
+  }
+
+  const validatePhone = (phone: string) => {
+    return /^[0-9\s\(\)\-]+$/.test(phone) // Only numbers, spaces, parentheses, and hyphens
+  }
+
+  const formatSocialUrl = (platform: string, value: string) => {
+    if (!value) return ''
+    
+    // If already a full URL, return as is
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value
+    }
+    
+    // Remove @ if present at the start
+    const cleanValue = value.startsWith('@') ? value.slice(1) : value
+    
+    switch (platform) {
+      case 'instagram':
+        return `https://instagram.com/${cleanValue}`
+      case 'linkedin':
+        return value.includes('linkedin.com') ? value : `https://linkedin.com/in/${cleanValue}`
+      case 'twitter':
+        return `https://twitter.com/${cleanValue}`
+      default:
+        return value
+    }
+  }
+
+  const extractUsername = (platform: string, value: string) => {
+    if (!value) return ''
+    
+    // If it's already just a username (no URL), return it with @
+    if (!value.includes('http') && !value.includes('.com')) {
+      return value.startsWith('@') ? value : `@${value}`
+    }
+    
+    // Extract username from URL
+    try {
+      const url = new URL(value.startsWith('http') ? value : `https://${value}`)
+      const pathname = url.pathname
+      
+      switch (platform) {
+        case 'instagram':
+          const igMatch = pathname.match(/\/([^\/]+)\/?$/)
+          return igMatch ? `@${igMatch[1]}` : value
+        case 'linkedin':
+          const liMatch = pathname.match(/\/in\/([^\/]+)\/?$/) || pathname.match(/\/([^\/]+)\/?$/)
+          return liMatch ? `@${liMatch[1]}` : value
+        case 'twitter':
+          const twMatch = pathname.match(/\/([^\/]+)\/?$/)
+          return twMatch ? `@${twMatch[1]}` : value
+        default:
+          return value
+      }
+    } catch {
+      return value
+    }
+  }
+
+  const handleNext = async () => {
     if (currentStep === 'personal') {
       if (!formData.name || !formData.email || !formData.phone || !formData.gender || !formData.age) {
         setError('Please fill in all required fields')
         return
       }
+      
+      if (!validateName(formData.name)) {
+        setError('Name can only contain letters and spaces')
+        return
+      }
+      
+      if (!validateEmail(formData.email)) {
+        setError('Please enter a valid email address')
+        return
+      }
+      
+      // Check if email already exists
+      const emailExists = await checkEmailExists(formData.email)
+      if (emailExists) {
+        setError('This email is already on the waitlist!')
+        return
+      }
+      
+      if (!validatePhone(formData.phone)) {
+        setError('Phone number can only contain numbers, spaces, parentheses, and hyphens')
+        return
+      }
+      
       if (parseInt(formData.age) < 18 || parseInt(formData.age) > 99) {
         setError('Age must be between 18 and 99')
         return
@@ -205,12 +548,12 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       const submissionData = {
         email: formData.email,
         name: formData.name,
-        phone: `${formData.countryCode}${formData.phone}`,
+        phone: `${formData.countryCode} ${formData.phone}`,
         gender: formData.gender,
         age: parseInt(formData.age),
-        instagram: `@${formData.instagram}`,
-        linkedin: formData.linkedin || null,
-        twitter: formData.twitter ? `@${formData.twitter}` : null,
+        instagram: formatSocialUrl('instagram', formData.instagram),
+        linkedin: formData.linkedin ? formatSocialUrl('linkedin', formData.linkedin) : null,
+        twitter: formData.twitter ? formatSocialUrl('twitter', formData.twitter) : null,
         created_at: new Date()
       }
 
@@ -284,7 +627,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.85, y: 60 }}
         transition={{ type: "spring", stiffness: 250, damping: 30, duration: 0.6 }}
-        className="relative bg-white/8 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        className="relative bg-white/8 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-2xl w-[60%] max-w-[60%] md:w-full md:max-w-md overflow-hidden"
         style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)' }}
       >
         {/* Loading Screen */}
@@ -309,7 +652,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
+                transition={{ delay: 1.2, duration: 0.6 }}
                 className="flex items-center gap-1 text-xl font-light text-white tracking-wide"
               >
                 <span>Entering June</span>
@@ -340,36 +683,12 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   transition={{ delay: 0.3, duration: 0.6 }}
                   className="space-y-2"
                 >
-                  <h2 className="text-2xl font-light text-white tracking-wider">Join June</h2>
-                  <p className="text-white/70 font-light text-sm tracking-wide">Find your perfect match</p>
+                  <h2 className="text-2xl font-light text-white tracking-wider">Apply to June</h2>
                 </motion.div>
               </div>
 
-              {/* Progress Indicator */}
-              <div className="px-6 py-4">
-                <div className="flex justify-between text-xs text-white/60 mb-3 font-medium tracking-wider uppercase">
-                  <span className={`transition-all duration-300 ${currentStep === 'personal' ? 'text-white font-semibold' : ''}`}>
-                    Personal
-                  </span>
-                  <span className={`transition-all duration-300 ${currentStep === 'social' ? 'text-white font-semibold' : ''}`}>
-                    Social
-                  </span>
-                  <span className={`transition-all duration-300 ${currentStep === 'confirmation' ? 'text-white font-semibold' : ''}`}>
-                    Review
-                  </span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                  <motion.div
-                    className="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 h-1.5 rounded-full shadow-lg"
-                    initial={{ width: '33%' }}
-                    animate={{
-                      width: currentStep === 'personal' ? '33%' :
-                             currentStep === 'social' ? '66%' : '100%'
-                    }}
-                    transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-                  />
-                </div>
-              </div>
+              {/* Enhanced Progress Circles */}
+              <ProgressCircles currentStep={currentStep} />
 
               {/* Form Content */}
               <div className="px-6 pb-6">
@@ -389,7 +708,12 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
                           type="text"
                           value={formData.name}
-                          onChange={(e) => updateFormData('name', e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value
+                            if (validateName(value) || value === '') {
+                              updateFormData('name', value)
+                            }
+                          }}
                           className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
                           placeholder="Enter your full name"
                         />
@@ -403,33 +727,39 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           value={formData.email}
                           onChange={(e) => updateFormData('email', e.target.value)}
                           className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="Enter your email address"
+                          placeholder="tryjune.dating@gmail.com"
                         />
                       </div>
 
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Phone Number *</label>
                         <div className="flex gap-2">
-                          <motion.select
+                          <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                            value={formData.countryCode}
-                            onChange={(e) => updateFormData('countryCode', e.target.value)}
-                            className="w-20 px-3 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm appearance-none cursor-pointer"
-                            style={{ backgroundImage: 'none' }}
-                          >
-                            {countryOptions.map((option, index) => (
-                              <option key={index} value={option.code} className="bg-black text-white">
-                                {option.code}
-                              </option>
-                            ))}
-                          </motion.select>
+                            type="text"
+                            value={`+${countryCodeInput}`}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/^\+/, '') // Remove + if user types it
+                              if (/^\d*$/.test(value)) { // Only allow digits
+                                setCountryCodeInput(value)
+                                updateFormData('countryCode', `+${value}`)
+                              }
+                            }}
+                            className="w-20 px-3 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                            placeholder="+1"
+                          />
                           <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
                             type="tel"
                             value={formData.phone}
-                            onChange={(e) => updateFormData('phone', e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value
+                              if (validatePhone(value) || value === '') {
+                                updateFormData('phone', value)
+                              }
+                            }}
                             className="flex-1 px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="123 456 7890"
+                            placeholder="(123) 456-7890"
                           />
                         </div>
                       </div>
@@ -441,7 +771,8 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
                             value={formData.gender}
                             onChange={(e) => updateFormData('gender', e.target.value)}
-                            className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                            className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm appearance-none"
+                            style={{ backgroundImage: 'none' }}
                           >
                             <option value="" className="bg-black text-white">Select</option>
                             <option value="Male" className="bg-black text-white">Male</option>
@@ -455,12 +786,12 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
                             type="number"
-                            min="18"
-                            max="99"
+                            min="16"
+                            max="120"
                             value={formData.age}
                             onChange={(e) => updateFormData('age', e.target.value)}
                             className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="25"
+                            placeholder="27"
                           />
                         </div>
                       </div>
@@ -478,44 +809,38 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     >
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Instagram Handle *</label>
-                        <div className="relative">
-                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 font-medium text-sm">@</span>
-                          <motion.input
-                            whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                            type="text"
-                            value={formData.instagram}
-                            onChange={(e) => updateFormData('instagram', e.target.value)}
-                            className="w-full pl-8 pr-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="yourusername"
-                          />
-                        </div>
+                        <motion.input
+                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
+                          type="text"
+                          value={formData.instagram}
+                          onChange={(e) => updateFormData('instagram', e.target.value)}
+                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                          placeholder="@yourusername or full profile URL"
+                        />
                       </div>
 
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">LinkedIn Profile (Optional)</label>
                         <motion.input
                           whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                          type="url"
+                          type="text"
                           value={formData.linkedin}
                           onChange={(e) => updateFormData('linkedin', e.target.value)}
                           className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="https://linkedin.com/in/yourprofile"
+                          placeholder="username or full profile URL"
                         />
                       </div>
 
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">X (Twitter) Handle (Optional)</label>
-                        <div className="relative">
-                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 font-medium text-sm">@</span>
-                          <motion.input
-                            whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                            type="text"
-                            value={formData.twitter}
-                            onChange={(e) => updateFormData('twitter', e.target.value)}
-                            className="w-full pl-8 pr-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="yourusername"
-                          />
-                        </div>
+                        <motion.input
+                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
+                          type="text"
+                          value={formData.twitter}
+                          onChange={(e) => updateFormData('twitter', e.target.value)}
+                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                          placeholder="@yourusername or full profile URL"
+                        />
                       </div>
 
                       <motion.div 
@@ -542,37 +867,37 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     >
                       <h3 className="text-xl font-light text-white mb-4 text-center tracking-wide">Review Your Application</h3>
                       
-                      <div className="space-y-3 text-sm bg-gradient-to-br from-white/8 to-white/4 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
-                        <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                          <span className="text-white/60 font-medium tracking-wide">Name</span>
+                      <div className="space-y-1 text-sm bg-gradient-to-br from-white/12 to-white/6 backdrop-blur-xl border border-white/15 rounded-3xl p-6 shadow-2xl">
+                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Name</span>
                           <span className="text-white font-medium">{formData.name}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                          <span className="text-white/60 font-medium tracking-wide">Email</span>
+                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Email</span>
                           <span className="text-white font-medium text-xs">{formData.email}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                          <span className="text-white/60 font-medium tracking-wide">Phone</span>
-                          <span className="text-white font-medium">{formData.countryCode}{formData.phone}</span>
+                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Phone</span>
+                          <span className="text-white font-medium">{formData.countryCode} {formData.phone}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                          <span className="text-white/60 font-medium tracking-wide">Gender & Age</span>
+                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Gender & Age</span>
                           <span className="text-white font-medium">{formData.gender}, {formData.age}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                          <span className="text-white/60 font-medium tracking-wide">Instagram</span>
-                          <span className="text-white font-medium">@{formData.instagram}</span>
+                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Instagram</span>
+                          <span className="text-white font-medium text-xs truncate max-w-32">{extractUsername('instagram', formData.instagram)}</span>
                         </div>
                         {formData.linkedin && (
-                          <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                            <span className="text-white/60 font-medium tracking-wide">LinkedIn</span>
-                            <span className="text-white font-medium truncate max-w-32 text-xs">{formData.linkedin}</span>
+                          <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                            <span className="text-white/70 font-medium tracking-wide text-xs uppercase">LinkedIn</span>
+                            <span className="text-white font-medium truncate max-w-32 text-xs">{extractUsername('linkedin', formData.linkedin)}</span>
                           </div>
                         )}
                         {formData.twitter && (
-                          <div className="flex justify-between items-center py-1.5 border-b border-white/10 last:border-b-0">
-                            <span className="text-white/60 font-medium tracking-wide">X (Twitter)</span>
-                            <span className="text-white font-medium">@{formData.twitter}</span>
+                          <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
+                            <span className="text-white/70 font-medium tracking-wide text-xs uppercase">X (Twitter)</span>
+                            <span className="text-white font-medium text-xs truncate max-w-32">{extractUsername('twitter', formData.twitter)}</span>
                           </div>
                         )}
                       </div>
@@ -599,22 +924,11 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       transition={{ type: "spring", stiffness: 150, damping: 25, duration: 0.6 }}
                       className="text-center py-6"
                     >
-                      <motion.div
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ delay: 0.3, type: "spring", stiffness: 200, duration: 0.6 }}
-                        className="mb-4"
-                      >
-                        <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full mx-auto flex items-center justify-center text-2xl font-light text-white shadow-2xl">
-                          ✓
-                        </div>
-                      </motion.div>
-                      
                       <motion.h3 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.6 }}
-                        className="text-xl font-light text-white mb-2 tracking-wide"
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="text-2xl font-light text-white mb-2 tracking-wide"
                       >
                         Congratulations!
                       </motion.h3>
@@ -622,10 +936,19 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       <motion.p 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7, duration: 0.6 }}
-                        className="text-white/90 mb-6 font-light text-sm tracking-wide"
+                        transition={{ delay: 0.5, duration: 0.6 }}
+                        className="text-white/90 mb-2 font-light text-sm tracking-wide"
                       >
-                        You are <span className="font-medium text-white">#{waitlistPosition}</span> on the waitlist
+                        You are <span className="font-medium text-white">#{waitlistPosition + 5000}</span> on the waitlist
+                      </motion.p>
+
+                      <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7, duration: 0.6 }}
+                        className="text-white/80 mb-6 font-light text-xs tracking-wider"
+                      >
+                        Be ready to enter the future of dating
                       </motion.p>
 
                       <motion.div
@@ -635,11 +958,11 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         className="mb-6"
                       >
                         <Image
-                          src="/images/purpledate.jpeg"
+                          src="/junelogo.png"
                           alt="June"
-                          width={160}
-                          height={160}
-                          className="rounded-2xl mx-auto shadow-2xl border border-white/20"
+                          width={120}
+                          height={120}
+                          className="mx-auto"
                         />
                       </motion.div>
                       
@@ -650,7 +973,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleClose}
-                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white px-6 py-3 rounded-2xl font-medium border border-white/20 hover:shadow-2xl transition-all duration-500 text-sm tracking-wide"
+                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white px-8 py-3 rounded-2xl font-medium border border-white/20 hover:shadow-2xl transition-all duration-500 text-sm tracking-wide"
                       >
                         Close
                       </motion.button>
@@ -713,6 +1036,8 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
           )}
         </AnimatePresence>
       </motion.div>
+      
+
     </div>
   )
 } 
