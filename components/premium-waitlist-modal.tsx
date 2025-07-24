@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { createClient } from '@/lib/supabase/client'
+import { X, Sparkles, ArrowRight, Star, Heart, Users, Zap, Shield, Crown, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
-import { montserrat } from '@/lib/fonts'
+import { createClient } from '@/lib/supabase/client'
 
 interface WaitlistModalProps {
   isOpen: boolean
@@ -267,7 +267,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${montserrat.className}`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4`}>
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}

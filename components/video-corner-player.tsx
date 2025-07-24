@@ -2,12 +2,14 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { useWaitlistCount } from '@/hooks/use-waitlist-count'
 
 export function VideoCornerPlayer() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { count, isLoading } = useWaitlistCount()
   const [isMobile, setIsMobile] = useState(false)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
 
   useEffect(() => {
     // Check if device is mobile
@@ -27,15 +29,24 @@ export function VideoCornerPlayer() {
   }, [])
 
   useEffect(() => {
-    // Only play video if not mobile
-    if (videoRef.current && !isMobile) {
+    // Delay video loading to improve initial page load
+    const timer = setTimeout(() => {
+      setShouldLoadVideo(true)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    // Only play video if not mobile and video should load
+    if (videoRef.current && !isMobile && shouldLoadVideo) {
       videoRef.current.muted = true
       videoRef.current.play().catch(() => {
         // Auto-play failed, which is normal on some browsers
         console.log('Auto-play blocked, video will play when user interacts')
       })
     }
-  }, [isMobile])
+  }, [isMobile, shouldLoadVideo])
 
   return (
     <>
@@ -51,14 +62,15 @@ export function VideoCornerPlayer() {
       >
         {/* Video Container - Exactly 90% of screen */}
         <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
-          {/* Conditional Video Element - Only render if not mobile */}
-          {!isMobile && (
+          {/* Conditional Video Element - Only render if not mobile and should load */}
+          {!isMobile && shouldLoadVideo && (
             <video
               ref={videoRef}
               loop
               muted
               autoPlay
               playsInline
+              preload="metadata"
               className="w-full h-full object-cover"
               style={{ pointerEvents: 'none' }} // Completely disable interaction
             >
@@ -67,8 +79,8 @@ export function VideoCornerPlayer() {
             </video>
           )}
 
-          {/* Fallback background for mobile devices */}
-          {isMobile && (
+          {/* Fallback background for mobile devices or before video loads */}
+          {(isMobile || !shouldLoadVideo) && (
             <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900" />
           )}
 
@@ -101,10 +113,15 @@ export function VideoCornerPlayer() {
                     transition={{ delay: index * 0.1 }}
                     className="relative"
                   >
-                    <img
+                    <Image
                       src={photo.src}
                       alt={photo.name}
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-lg"
+                      sizes="32px"
+                      quality={75}
+                      priority={index < 2}
                     />
                   </motion.div>
                 ))}

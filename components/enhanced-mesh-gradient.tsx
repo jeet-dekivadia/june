@@ -7,11 +7,11 @@ export function EnhancedMeshGradient({ speed, ...props }: MeshGradientProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    // Add opacity to body once gradient is loaded
+    // Small delay to improve initial paint
     const timer = setTimeout(() => {
+      setMounted(true)
       document.body.classList.add('opacity-100')
-    }, 100)
+    }, 200)
     
     return () => clearTimeout(timer)
   }, [])

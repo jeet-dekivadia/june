@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 interface TimeLeft {
@@ -13,6 +13,7 @@ interface TimeLeft {
 export function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [mounted, setMounted] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   // August 18, 2025 - National Couples Day
   const launchDate = new Date('2025-08-18T00:00:00').getTime()
@@ -20,21 +21,49 @@ export function CountdownTimer() {
   useEffect(() => {
     setMounted(true)
     
-    const timer = setInterval(() => {
+    const updateCountdown = () => {
       const now = new Date().getTime()
       const difference = launchDate - now
 
       if (difference > 0) {
-        setTimeLeft({
+        const newTimeLeft = {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((difference % (1000 * 60)) / 1000)
+        }
+        
+        // Only update if values actually changed to reduce re-renders
+        setTimeLeft(prev => {
+          if (prev.days !== newTimeLeft.days || 
+              prev.hours !== newTimeLeft.hours || 
+              prev.minutes !== newTimeLeft.minutes || 
+              prev.seconds !== newTimeLeft.seconds) {
+            return newTimeLeft
+          }
+          return prev
         })
       }
-    }, 1000)
+    }
 
-    return () => clearInterval(timer)
+    // Use requestAnimationFrame for smoother updates
+    const scheduleUpdate = () => {
+      intervalRef.current = setTimeout(() => {
+        requestAnimationFrame(() => {
+          updateCountdown()
+          scheduleUpdate()
+        })
+      }, 1000)
+    }
+
+    updateCountdown()
+    scheduleUpdate()
+
+    return () => {
+      if (intervalRef.current) {
+        clearTimeout(intervalRef.current)
+      }
+    }
   }, [launchDate])
 
   if (!mounted) {

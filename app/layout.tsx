@@ -13,10 +13,14 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   preload: true,
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
 })
 
 export const viewport: Viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
+  width: 'device-width',
+  initialScale: 1,
+  // Removed maximumScale restriction for accessibility compliance
 }
 
 export const metadata = {

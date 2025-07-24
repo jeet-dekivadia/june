@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 export function FomoBanner() {
 
@@ -30,10 +31,15 @@ export function FomoBanner() {
               transition={{ delay: index * 0.1 }}
               className="relative"
             >
-              <img
+              <Image
                 src={photo.src}
                 alt={photo.name}
+                width={28}
+                height={28}
                 className="w-7 h-7 rounded-full border-2 border-white/30 object-cover"
+                sizes="28px"
+                quality={75}
+                priority={index < 2}
               />
             </motion.div>
           ))}
