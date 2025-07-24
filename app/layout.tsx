@@ -184,7 +184,7 @@ export default function RootLayout({
           <VideoCornerPlayer />
 
           <div className="w-full relative z-20 flex flex-col min-h-screen">
-            <main className="flex justify-center items-center min-h-screen">{children}</main>
+            <main className="flex justify-center min-h-screen md:items-center items-start pt-40 md:pt-0">{children}</main>
           </div>
         </ThemeProvider>
         <Analytics />
