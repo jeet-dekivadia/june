@@ -40,7 +40,7 @@ export function ManifestoCard() {
     <CardWithNav>
       <div
       className={clsx(
-        "w-full mx-auto max-w-[450px] flex flex-col justify-center items-center pb-0 overflow-hidden rounded-3xl",
+        "w-full mx-auto max-w-[400px] flex flex-col justify-center items-center pb-0 overflow-hidden rounded-3xl",
         // Ultra-transparent light beige glass effect
         "bg-amber-50/3 backdrop-blur-md border border-amber-100/15",
         // Enhanced shadows for depth
@@ -72,7 +72,7 @@ export function ManifestoCard() {
             </h1>
             <div className="text-white/90 text-sm leading-relaxed space-y-3">
               <p className="drop-shadow-sm">
-                10% people get 90% dates.Dating shouldn't be a numbers game. It should be about finding the one person who truly gets you.
+                10% people get 90% dates. The age of swiping is over.
               </p>
             </div>
           </div>
