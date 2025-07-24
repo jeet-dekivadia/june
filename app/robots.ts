@@ -5,8 +5,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/private/'],
+      disallow: ['/api/', '/admin/'],
     },
     sitemap: 'https://junedate.com/sitemap.xml',
+    host: 'https://junedate.com',
   }
 } 

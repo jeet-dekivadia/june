@@ -1,0 +1,32 @@
+{
+  "name": "June - AI Dating App",
+  "short_name": "June",
+  "description": "The revolutionary AI dating app that connects you with your perfect match. No endless swiping.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/junelogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "social"],
+  "screenshots": [
+    {
+      "src": "/images/june-social.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "June Dating App Screenshot"
+    }
+  ]
+} 

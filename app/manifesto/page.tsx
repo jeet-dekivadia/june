@@ -2,9 +2,9 @@ import { ManifestoCard } from "@/components/manifesto-card"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Our Manifesto | June Dating App - Transforming Love Through AI",
+  title: "June Manifesto",
   description:
-    "Read why we're building the future of dating at June. Our mission to transform how people find love through AI-powered connections, meaningful conversations, and authentic relationships. Join the dating revolution.",
+    "Read our manifesto on transforming how people find love. 10% of people get 90% of dates. The age of swiping is over. Discover why we're building the future of dating through AI-powered meaningful connections.",
   keywords: [
     "june manifesto",
     "AI dating philosophy", 
@@ -16,34 +16,43 @@ export const metadata: Metadata = {
     "authentic relationships",
     "june dating vision",
     "dating transformation",
-    "AI matchmaking philosophy"
+    "AI matchmaking philosophy",
+    "no swiping",
+    "dating inequality",
+    "june team"
   ],
+  authors: [{ name: "June Team" }],
+  creator: "June",
+  publisher: "June",
   openGraph: {
     type: "article",
     url: "https://junedate.com/manifesto",
-    title: "Our Manifesto | June Dating App - Transforming Love Through AI",
+    title: "June Manifesto",
     description:
-      "Read why we're building the future of dating at June. Our mission to transform how people find love through AI-powered connections and meaningful conversations.",
+      "Read our manifesto on transforming how people find love. 10% of people get 90% of dates. The age of swiping is over. Discover the future of dating.",
     images: [
       {
-        url: "https://junedate.com/junelogo.png",
+        url: "https://junedate.com/images/june-social.png",
         width: 1200,
         height: 630,
-        alt: "June Dating App Manifesto",
+        alt: "June Manifesto - The Future of Dating",
         type: "image/png",
       }
     ],
-    siteName: "June Dating",
+    siteName: "June",
     locale: "en_US",
+    publishedTime: "2024-01-01T00:00:00.000Z",
+    modifiedTime: new Date().toISOString(),
+    authors: ["June Team"],
   },
   twitter: {
     card: "summary_large_image",
     site: "@junedate",
     creator: "@junedate",
-    title: "Our Manifesto | June Dating App - Transforming Love Through AI",
+    title: "June Manifesto",
     description:
-      "Read why we're building the future of dating. Our mission to transform how people find love through AI-powered connections.",
-    images: ["https://junedate.com/junelogo.png"],
+      "Read our manifesto on transforming how people find love. 10% of people get 90% of dates. The age of swiping is over.",
+    images: ["https://junedate.com/images/june-social.png"],
   },
   alternates: {
     canonical: "https://junedate.com/manifesto",
@@ -51,6 +60,13 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 

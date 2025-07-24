@@ -111,10 +111,10 @@ export function ManifestoCard() {
             className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-amber-50/8 hover:border-amber-100/30 hover:shadow-lg"
           >
             <p className="text-sm text-white/90 drop-shadow-sm italic">
-              "It's not about more options—it's about the right option."
-            </p>
-            <p className="text-xs text-white/70 mt-2 drop-shadow-sm">
-              — The June Team
+              "It's not about more options—it's about the right option." 
+              <span className="text-xs text-white/70 mt-2 drop-shadow-sm">
+              &emsp;— The June Team
+              </span>
             </p>
           </div>
 

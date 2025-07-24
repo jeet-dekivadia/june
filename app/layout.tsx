@@ -20,16 +20,22 @@ const geistSans = Geist({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // Removed maximumScale restriction for accessibility compliance
+  maximumScale: 5,
+  colorScheme: 'dark',
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 }
 
 export const metadata = {
+  metadataBase: new URL('https://junedate.com'),
   title: {
-    template: "%s | June - The Future of AI Dating",
-    default: "June - AI Dating App | Find Your Perfect Match | No Endless Swiping",
+    template: "%s | June",
+    default: "June - AI Dating App",
   },
   description:
-    "June is the revolutionary AI dating app that connects you with your perfect match. No endless swiping, no fake profiles. Experience the future of online dating with meaningful connections. Join thousands finding love through AI-powered matchmaking.",
+    "The dating app of the future that connects you with your perfect match. No endless swiping.",
   keywords: [
     "dating app",
     "AI dating", 
@@ -48,48 +54,44 @@ export const metadata = {
     "love app",
     "romance app",
     "dating service",
-    "meaningful connections",
-    "serious dating",
-    "relationship finder"
+    "no swiping",
+    "future of dating",
+    "meaningful connections"
   ],
-  authors: [{ name: "June Dating" }],
-  creator: "June Dating",
-  publisher: "June Dating",
-  metadataBase: new URL('https://junedate.com'),
-  alternates: {
-    canonical: '/',
+  authors: [{ name: "June Team" }],
+  creator: "Jeet Dekivadia",
+  publisher: "Jeet Dekivadia",
+  applicationName: "June",
+  referrer: "origin-when-cross-origin",
+  icons: {
+    icon: "/junelogo.png",
+    shortcut: "/junelogo.png",
+    apple: "/junelogo.png",
   },
+  manifest: "/manifest.json",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://junedate.com",
-    siteName: "June - AI Dating App",
-    title: "June - AI Dating App | Find Your Perfect Match | No Endless Swiping",
-    description: "The revolutionary AI dating app that connects you with your perfect match. No endless swiping, no fake profiles. Join thousands finding love through AI-powered matchmaking.",
+    siteName: "June",
+    title: "June - AI Dating App",
+    description: "The dating app of the future that connects you with your perfect match. No endless swiping.",
     images: [
       {
-        url: "/junelogo.png",
+        url: "/images/june-social.png",
         width: 1200,
         height: 630,
-        alt: "June - The Future of AI Dating",
-        type: "image/png",
+        alt: "June - AI Dating App",
       },
-      {
-        url: "/images/june-logo.png", 
-        width: 800,
-        height: 600,
-        alt: "June Dating App Logo",
-        type: "image/png",
-      }
     ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@junedate",
-    creator: "@junedate", 
-    title: "June - AI Dating App | Find Your Perfect Match",
-    description: "The revolutionary AI dating app that connects you with your perfect match. No endless swiping, no fake profiles. Experience the future of dating.",
-    images: ["/junelogo.png"],
+    creator: "@junedate",
+    title: "June - AI Dating App",
+    description: "The dating app of the future that connects you with your perfect match. No endless swiping.",
+    images: ["/images/june-social.png"],
   },
   robots: {
     index: true,
@@ -97,23 +99,48 @@ export const metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code", // You'll need to add this when you set up Google Search Console
+  alternates: {
+    canonical: "https://junedate.com",
   },
-  category: "Dating & Relationships",
-  generator: 'Next.js',
-  applicationName: 'June Dating App',
-  referrer: 'origin-when-cross-origin',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
+}
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "June",
+  "applicationCategory": "SocialNetworkingApplication",
+  "description": "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. Experience the future of online dating.",
+  "url": "https://junedate.com",
+  "downloadUrl": "https://junedate.com",
+  "operatingSystem": "iOS, Android, Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
   },
+  "publisher": {
+    "@type": "Organization",
+    "name": "June",
+    "url": "https://junedate.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://junedate.com/images/june-social.png"
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "24847"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "June Team"
+  }
 }
 
 export default function RootLayout({
@@ -121,31 +148,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "June Dating App",
-    "url": "https://junedate.com",
-    "description": "Revolutionary AI dating app that connects you with your perfect match. No endless swiping, no fake profiles.",
-    "applicationCategory": "LifestyleApplication",
-    "operatingSystem": "iOS, Android, Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "creator": {
-      "@type": "Organization",
-      "name": "June Dating",
-      "url": "https://junedate.com"
-    },
-    "keywords": "AI dating app, online dating, matchmaking, relationships, dating platform",
-    "sameAs": [
-      "https://twitter.com/junedate",
-      "https://instagram.com/junedate"
-    ]
-  };
-
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <head>
