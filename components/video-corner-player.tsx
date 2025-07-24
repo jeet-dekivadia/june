@@ -91,14 +91,18 @@ export function VideoCornerPlayer() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/10" />
 
           {/* FOMO Banner - Perfectly centered horizontally in video frame */}
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center z-20">
+          <div className={`absolute left-0 right-0 flex justify-center z-20 ${isMobile ? 'bottom-3' : 'bottom-6'}`}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-3 bg-black/40 backdrop-blur-xl rounded-full px-6 py-3 border border-white/30 shadow-2xl"
+              className={`flex items-center bg-black/40 backdrop-blur-xl rounded-full border border-white/30 shadow-2xl ${
+                isMobile 
+                  ? 'gap-2 px-3 py-2' // 50% smaller spacing on mobile
+                  : 'gap-3 px-6 py-3' // Original spacing on desktop
+              }`}
             >
               {/* Profile Photos */}
-              <div className="flex items-center -space-x-2">
+              <div className={`flex items-center ${isMobile ? '-space-x-1' : '-space-x-2'}`}>
                 {[
                   { id: 1, name: 'Adriana', src: '/adriana.jpg' },
                   { id: 2, name: 'Aija', src: '/aija.jpg' },
@@ -116,10 +120,14 @@ export function VideoCornerPlayer() {
                     <Image
                       src={photo.src}
                       alt={photo.name}
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-lg"
-                      sizes="32px"
+                      width={isMobile ? 16 : 32} // 50% smaller on mobile
+                      height={isMobile ? 16 : 32} // 50% smaller on mobile
+                      className={`rounded-full border-2 border-white/40 object-cover shadow-lg ${
+                        isMobile 
+                          ? 'w-4 h-4' // 50% smaller on mobile (16px)
+                          : 'w-8 h-8' // Original size on desktop (32px)
+                      }`}
+                      sizes={isMobile ? "16px" : "32px"}
                       quality={75}
                       priority={index < 2}
                     />
@@ -128,8 +136,12 @@ export function VideoCornerPlayer() {
               </div>
 
               {/* Text with exact real-time count */}
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-white text-sm font-semibold drop-shadow-lg">
+              <div className={`flex flex-col items-center ${isMobile ? 'gap-0.5' : 'gap-1'}`}>
+                <span className={`text-white font-semibold drop-shadow-lg ${
+                  isMobile 
+                    ? 'text-xs' // 50% smaller text on mobile
+                    : 'text-sm' // Original size on desktop
+                }`}>
                   {isLoading ? (
                     'Join others on the June waitlist'
                   ) : count === 0 ? (
@@ -140,9 +152,12 @@ export function VideoCornerPlayer() {
                     `Join ${count+5000} others on the June waitlist`
                   )}
                 </span>
-                <span className="text-white/90 text-xs drop-shadow-sm">
-                  <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
-                </span>
+                {/* Only show launch date on desktop */}
+                {!isMobile && (
+                  <span className="text-white/90 text-xs drop-shadow-sm">
+                    <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
+                  </span>
+                )}
               </div>
             </motion.div>
           </div>
