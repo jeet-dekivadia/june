@@ -5,20 +5,64 @@ import { HomeClient } from "@/components/home-client"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "June - Welcome to the Future of Dating",
+  title: "June - AI Dating App | Find Your Perfect Match Without Endless Swiping",
   description:
-    "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
+    "Join June, the revolutionary AI dating app changing how people find love. No endless swiping, no fake profiles. Our AI technology connects you with your perfect match based on deep compatibility. Sign up for early access to the future of online dating.",
+  keywords: [
+    "june dating app",
+    "AI dating app", 
+    "dating app",
+    "june date",
+    "junedate.com",
+    "online dating",
+    "dating site",
+    "find girlfriend",
+    "find boyfriend",
+    "perfect match",
+    "AI matchmaking",
+    "relationship app",
+    "dating platform",
+    "no swiping dating",
+    "meaningful connections",
+    "future of dating",
+    "love app",
+    "romance app",
+    "serious dating",
+    "dating service"
+  ],
   openGraph: {
     type: "website",
-    title: "June - Welcome to the Future of Dating",
+    url: "https://junedate.com",
+    title: "June - AI Dating App | Find Your Perfect Match Without Endless Swiping",
     description:
-      "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
+      "Join June, the revolutionary AI dating app changing how people find love. No endless swiping, no fake profiles. Our AI technology connects you with your perfect match based on deep compatibility.",
+    images: [
+      {
+        url: "https://junedate.com/junelogo.png",
+        width: 1200,
+        height: 630,
+        alt: "June - The Future of AI Dating App",
+        type: "image/png",
+      }
+    ],
+    siteName: "June Dating",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "June - Welcome to the Future of Dating",
+    site: "@junedate",
+    creator: "@junedate",
+    title: "June - AI Dating App | Find Your Perfect Match",
     description:
-      "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Just one meaningful connection that could change everything.",
+      "Join June, the revolutionary AI dating app. No endless swiping, no fake profiles. Sign up for early access to the future of dating.",
+    images: ["https://junedate.com/junelogo.png"],
+  },
+  alternates: {
+    canonical: "https://junedate.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 }
 
