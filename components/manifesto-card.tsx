@@ -17,7 +17,7 @@ export function ManifestoCard() {
       image: "/aija.jpg"
     },
     {
-      name: "Nuseir Yasin", 
+      name: "Nuseir Yassin", 
       role: "Chief Marketing Officer",
       linkedin: "https://www.linkedin.com/in/nyassin/",
       image: "/nas.jpg"
@@ -26,13 +26,13 @@ export function ManifestoCard() {
       name: "Jeet Dekivadia",
       role: "Chief Technology Officer", 
       linkedin: "https://www.linkedin.com/in/jeetdekivadia/",
-      image: "/henry.webp"
+      image: "/headshot.jpeg"
     },
     {
       name: "Kartik Bihani",
       role: "Chief Product Officer",
       linkedin: "https://www.linkedin.com/in/kbihani/",
-      image: "/megan.webp"
+      image: "/headshot.jpeg"
     }
   ]
 
@@ -72,10 +72,7 @@ export function ManifestoCard() {
             </h1>
             <div className="text-white/90 text-sm leading-relaxed space-y-3">
               <p className="drop-shadow-sm">
-                Dating shouldn't be a numbers game. It should be about finding the one person who truly gets you.
-              </p>
-              <p className="drop-shadow-sm">
-                We're building June to replace endless swiping with meaningful connections powered by advanced AI.
+                10% people get 90% dates.Dating shouldn't be a numbers game. It should be about finding the one person who truly gets you.
               </p>
             </div>
           </div>
@@ -86,7 +83,7 @@ export function ManifestoCard() {
             className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-amber-50/8 hover:border-amber-100/30 hover:shadow-lg"
           >
             <p className="text-sm text-white/90 drop-shadow-sm italic">
-              "The future of dating isn't about more options—it's about the right option."
+              "It's not about more options—it's about the right option."
             </p>
             <p className="text-xs text-white/70 mt-2 drop-shadow-sm">
               — The June Team

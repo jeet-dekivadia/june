@@ -20,7 +20,7 @@ export function HomeClient() {
             </h1>
             <div className="text-white/70 text-sm [&>p]:tracking-tight text-pretty">
               <p className="drop-shadow-sm">
-                <s>Swiping</s> <br /> We know you better than you know yourself
+                <s>No Swiping</s> <br /> We know you better than you know yourself
               </p>
             </div>
           </div>
