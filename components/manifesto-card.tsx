@@ -119,11 +119,11 @@ export function ManifestoCard() {
           </div>
 
           {/* Launch Info */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <p className="text-xs text-white/80 drop-shadow-sm">
               Join the waitlist. Be part of the Future.
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
       </div>
