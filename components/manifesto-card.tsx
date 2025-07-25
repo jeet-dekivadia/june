@@ -15,7 +15,7 @@ export function ManifestoCard() {
     {
       name: "Aija Mayrock",
       role: "Chief Executive Officer",
-      linkedin: "https://www.linkedin.com/in/aija-mayrock-a364a2b5/",
+      linkedin: "https://www.instagram.com/aija/",
       image: "/aija.jpg"
     },
     {

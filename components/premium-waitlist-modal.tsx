@@ -26,7 +26,7 @@ interface FormData {
 const initialFormData: FormData = {
   name: '',
   phone: '',
-  countryCode: '+1',
+  countryCode: '+',
   location: '',
   gender: '',
   age: '',
@@ -620,7 +620,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [error, setError] = useState<string>('')
   const [waitlistPosition, setWaitlistPosition] = useState<number>(0)
   const [isInitialLoading, setIsInitialLoading] = useState(false)
-  const [countryCodeInput, setCountryCodeInput] = useState('1')
+  const [countryCodeInput, setCountryCodeInput] = useState('')
   const [bestLocationMatch, setBestLocationMatch] = useState<LocationSuggestion | null>(null)
   const [fullLocationData, setFullLocationData] = useState<string>('') // Store complete location for geolocation
   const [showLocationSuggestion, setShowLocationSuggestion] = useState(false)
@@ -651,7 +651,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setError('')
     setWaitlistPosition(0)
     setIsInitialLoading(false)
-    setCountryCodeInput('1')
+    setCountryCodeInput('')
     setBestLocationMatch(null)
     setFullLocationData('')
     setShowLocationSuggestion(false)
@@ -1010,7 +1010,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       const fullSubmissionData = {
         email: null, // Set email as null as requested
         name: formData.name,
-        phone: `${formData.countryCode} ${formData.phone}`,
+        phone: `${formData.countryCode}${formData.phone.replace(/\s/g, '')}`, // Remove all spaces
         location: fullLocationData || formData.location, // Use full location data if available from geolocation
         gender: formData.gender,
         age: parseInt(formData.age),
@@ -1217,13 +1217,14 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             value={`+${countryCodeInput}`}
                             onChange={(e) => {
                               const value = e.target.value.replace(/^\+/, '') // Remove + if user types it
-                              if (/^\d*$/.test(value)) { // Only allow digits
+                              if (/^\d*$/.test(value) && value.length <= 3) { // Only allow digits and max 3 characters
                                 setCountryCodeInput(value)
                                 updateFormData('countryCode', `+${value}`)
                               }
                             }}
                             className="w-20 px-3 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="+1"
+                            placeholder="+"
+                            maxLength={4}
                           />
                           <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
@@ -1268,7 +1269,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                                 }, 200)
                               }}
                               className="w-full px-4 py-3 pr-12 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                              placeholder="Enter your city..."
+                              placeholder="Allow Location"
                             />
                             
                             {/* Location Action Button */}
