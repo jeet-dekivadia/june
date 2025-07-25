@@ -292,7 +292,7 @@ const PurpleLumaSpinner = () => {
           }
         }
         .animate-lumaAnim {
-          animation: lumaAnim 1.5s infinite ease-in-out;
+          animation: lumaAnim 3s infinite ease-in-out;
         }
         .animation-delay {
           animation-delay: -1.5s;
@@ -381,7 +381,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       setIsInitialLoading(true)
       const timer = setTimeout(() => {
         setIsInitialLoading(false)
-      }, 1000) // 1 second loading time
+      }, 1200) // 1.2 second loading time
 
       return () => clearTimeout(timer)
     }
