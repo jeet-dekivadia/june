@@ -16,6 +16,7 @@
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "^2.46.1",
     "@vercel/analytics": "latest",
+    "@vercel/speed-insights": "^1.2.0",
     "autoprefixer": "^10.4.20",
     "basehub": "latest",
     "class-variance-authority": "^0.7.1",

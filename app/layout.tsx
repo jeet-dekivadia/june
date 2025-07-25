@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Geist } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { Header } from "@/components/header"
@@ -200,6 +201,7 @@ export default function RootLayout({
           </div>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights/>
       </body>
     </html>
   )

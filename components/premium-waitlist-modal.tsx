@@ -45,7 +45,7 @@ interface LocationSuggestion {
   place_id: number
 }
 
-// Debounce hook for API calls
+// Debounce hook for API calls - faster for instant search
 const useDebounce = (value: string, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value)
 
@@ -61,6 +61,251 @@ const useDebounce = (value: string, delay: number) => {
 
   return debouncedValue
 }
+
+// Popular cities for instant search
+const popularCities = [
+  'New York City, United States',
+  'Los Angeles, United States', 
+  'Chicago, United States',
+  'Houston, United States',
+  'Phoenix, United States',
+  'Philadelphia, United States',
+  'San Antonio, United States',
+  'San Diego, United States',
+  'Dallas, United States',
+  'San Jose, United States',
+  'Austin, United States',
+  'Jacksonville, United States',
+  'San Francisco, United States',
+  'Columbus, United States',
+  'Charlotte, United States',
+  'Fort Worth, United States',
+  'Indianapolis, United States',
+  'Seattle, United States',
+  'Denver, United States',
+  'Boston, United States',
+  'El Paso, United States',
+  'Nashville, United States',
+  'Detroit, United States',
+  'Oklahoma City, United States',
+  'Portland, United States',
+  'Las Vegas, United States',
+  'Memphis, United States',
+  'Louisville, United States',
+  'Baltimore, United States',
+  'Milwaukee, United States',
+  'Albuquerque, United States',
+  'Tucson, United States',
+  'Fresno, United States',
+  'Sacramento, United States',
+  'Mesa, United States',
+  'Kansas City, United States',
+  'Atlanta, United States',
+  'Long Beach, United States',
+  'Omaha, United States',
+  'Raleigh, United States',
+  'Colorado Springs, United States',
+  'Miami, United States',
+  'Virginia Beach, United States',
+  'Oakland, United States',
+  'Minneapolis, United States',
+  'Tulsa, United States',
+  'Arlington, United States',
+  'Tampa, United States',
+  'New Orleans, United States',
+  'Wichita, United States',
+  'Cleveland, United States',
+  'Bakersfield, United States',
+  'Aurora, United States',
+  'Anaheim, United States',
+  'Honolulu, United States',
+  'Santa Ana, United States',
+  'Corpus Christi, United States',
+  'Riverside, United States',
+  'Lexington, United States',
+  'Stockton, United States',
+  'Henderson, United States',
+  'Saint Paul, United States',
+  'St. Louis, United States',
+  'Cincinnati, United States',
+  'Pittsburgh, United States',
+  // International cities
+  'London, United Kingdom',
+  'Paris, France',
+  'Berlin, Germany',
+  'Madrid, Spain',
+  'Rome, Italy',
+  'Amsterdam, Netherlands',
+  'Barcelona, Spain',
+  'Vienna, Austria',
+  'Prague, Czech Republic',
+  'Budapest, Hungary',
+  'Warsaw, Poland',
+  'Stockholm, Sweden',
+  'Copenhagen, Denmark',
+  'Oslo, Norway',
+  'Helsinki, Finland',
+  'Dublin, Ireland',
+  'Brussels, Belgium',
+  'Zurich, Switzerland',
+  'Geneva, Switzerland',
+  'Munich, Germany',
+  'Frankfurt, Germany',
+  'Hamburg, Germany',
+  'Milan, Italy',
+  'Naples, Italy',
+  'Florence, Italy',
+  'Venice, Italy',
+  'Lisbon, Portugal',
+  'Porto, Portugal',
+  'Athens, Greece',
+  'Istanbul, Turkey',
+  'Moscow, Russia',
+  'Saint Petersburg, Russia',
+  'Tokyo, Japan',
+  'Osaka, Japan',
+  'Kyoto, Japan',
+  'Seoul, South Korea',
+  'Busan, South Korea',
+  'Beijing, China',
+  'Shanghai, China',
+  'Guangzhou, China',
+  'Shenzhen, China',
+  'Hong Kong, Hong Kong',
+  'Macau, Macau',
+  'Taipei, Taiwan',
+  'Singapore, Singapore',
+  'Bangkok, Thailand',
+  'Manila, Philippines',
+  'Jakarta, Indonesia',
+  'Kuala Lumpur, Malaysia',
+  'Ho Chi Minh City, Vietnam',
+  'Hanoi, Vietnam',
+  'Mumbai, India',
+  'Delhi, India',
+  'Bangalore, India',
+  'Chennai, India',
+  'Kolkata, India',
+  'Hyderabad, India',
+  'Pune, India',
+  'Ahmedabad, India',
+  'Sydney, Australia',
+  'Melbourne, Australia',
+  'Brisbane, Australia',
+  'Perth, Australia',
+  'Adelaide, Australia',
+  'Auckland, New Zealand',
+  'Wellington, New Zealand',
+  'Toronto, Canada',
+  'Vancouver, Canada',
+  'Montreal, Canada',
+  'Calgary, Canada',
+  'Ottawa, Canada',
+  'Edmonton, Canada',
+  'Winnipeg, Canada',
+  'Quebec City, Canada',
+  'Hamilton, Canada',
+  'Kitchener, Canada',
+  'Mexico City, Mexico',
+  'Guadalajara, Mexico',
+  'Monterrey, Mexico',
+  'Puebla, Mexico',
+  'Tijuana, Mexico',
+  'León, Mexico',
+  'Juárez, Mexico',
+  'São Paulo, Brazil',
+  'Rio de Janeiro, Brazil',
+  'Brasília, Brazil',
+  'Salvador, Brazil',
+  'Fortaleza, Brazil',
+  'Belo Horizonte, Brazil',
+  'Manaus, Brazil',
+  'Curitiba, Brazil',
+  'Recife, Brazil',
+  'Porto Alegre, Brazil',
+  'Buenos Aires, Argentina',
+  'Córdoba, Argentina',
+  'Rosario, Argentina',
+  'Mendoza, Argentina',
+  'La Plata, Argentina',
+  'Santiago, Chile',
+  'Valparaíso, Chile',
+  'Concepción, Chile',
+  'Lima, Peru',
+  'Arequipa, Peru',
+  'Trujillo, Peru',
+  'Bogotá, Colombia',
+  'Medellín, Colombia',
+  'Cali, Colombia',
+  'Barranquilla, Colombia',
+  'Cartagena, Colombia',
+  'Caracas, Venezuela',
+  'Maracaibo, Venezuela',
+  'Valencia, Venezuela',
+  'Quito, Ecuador',
+  'Guayaquil, Ecuador',
+  'La Paz, Bolivia',
+  'Santa Cruz, Bolivia',
+  'Asunción, Paraguay',
+  'Montevideo, Uruguay',
+  'Cape Town, South Africa',
+  'Johannesburg, South Africa',
+  'Durban, South Africa',
+  'Pretoria, South Africa',
+  'Port Elizabeth, South Africa',
+  'Cairo, Egypt',
+  'Alexandria, Egypt',
+  'Giza, Egypt',
+  'Lagos, Nigeria',
+  'Kano, Nigeria',
+  'Ibadan, Nigeria',
+  'Abuja, Nigeria',
+  'Casablanca, Morocco',
+  'Rabat, Morocco',
+  'Fez, Morocco',
+  'Marrakech, Morocco',
+  'Algiers, Algeria',
+  'Oran, Algeria',
+  'Constantine, Algeria',
+  'Tunis, Tunisia',
+  'Sfax, Tunisia',
+  'Sousse, Tunisia',
+  'Tripoli, Libya',
+  'Benghazi, Libya',
+  'Khartoum, Sudan',
+  'Omdurman, Sudan',
+  'Addis Ababa, Ethiopia',
+  'Dire Dawa, Ethiopia',
+  'Nairobi, Kenya',
+  'Mombasa, Kenya',
+  'Kisumu, Kenya',
+  'Kampala, Uganda',
+  'Entebbe, Uganda',
+  'Kigali, Rwanda',
+  'Bujumbura, Burundi',
+  'Dar es Salaam, Tanzania',
+  'Dodoma, Tanzania',
+  'Mwanza, Tanzania',
+  'Lusaka, Zambia',
+  'Ndola, Zambia',
+  'Harare, Zimbabwe',
+  'Bulawayo, Zimbabwe',
+  'Gaborone, Botswana',
+  'Francistown, Botswana',
+  'Windhoek, Namibia',
+  'Swakopmund, Namibia',
+  'Maseru, Lesotho',
+  'Mbabane, Eswatini',
+  'Maputo, Mozambique',
+  'Beira, Mozambique',
+  'Antananarivo, Madagascar',
+  'Toamasina, Madagascar',
+  'Port Louis, Mauritius',
+  'Victoria, Seychelles'
+]
+
+// Cache for API results
+const locationCache = new Map<string, LocationSuggestion[]>()
 
 // Comprehensive list of 150+ country codes with names
 const countryOptions = [
@@ -385,8 +630,8 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const supabase = createClient()
   const modalRef = useRef<HTMLDivElement>(null)
 
-  // Debounced search term for API calls - faster for better UX
-  const debouncedLocationSearch = useDebounce(formData.location, 150)
+  // Debounced search term for API calls - ultra fast for better UX
+  const debouncedLocationSearch = useDebounce(formData.location, 50)
 
   // Handle initial loading animation when modal opens
   useEffect(() => {
@@ -416,11 +661,63 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     onClose()
   }
 
-  // Optimized location search - returns only the best match
+  // Ultra-fast location search with instant local results
   const searchBestLocation = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setBestLocationMatch(null)
+      setShowLocationSuggestion(false)
+      return
+    }
+
+    // First, do instant local search with smart matching
+    const queryLower = query.toLowerCase().trim()
+    const localMatches = popularCities.filter(city => {
+      const cityLower = city.toLowerCase()
+      // Prioritize starts-with matches first, then contains
+      return cityLower.startsWith(queryLower) || cityLower.includes(queryLower)
+    }).sort((a, b) => {
+      const aLower = a.toLowerCase()
+      const bLower = b.toLowerCase()
+      // Prioritize exact starts-with matches
+      const aStarts = aLower.startsWith(queryLower)
+      const bStarts = bLower.startsWith(queryLower)
+      if (aStarts && !bStarts) return -1
+      if (!aStarts && bStarts) return 1
+      return a.localeCompare(b)
+    })
+
+    if (localMatches.length > 0) {
+      // Instantly show best local match
+      const bestLocal = localMatches[0]
+      const mockLocationSuggestion: LocationSuggestion = {
+        display_name: bestLocal,
+        lat: '0', // Will be filled by geolocation if needed
+        lon: '0',
+        place_id: Date.now() // Mock ID
+      }
+      setBestLocationMatch(mockLocationSuggestion)
+      setShowLocationSuggestion(true)
+      return
+    }
+
+    // Only if no local matches and user typed 3+ chars, do API search
     if (query.length < 3) {
       setBestLocationMatch(null)
       setShowLocationSuggestion(false)
+      return
+    }
+
+    // Check cache first
+    const cacheKey = query.toLowerCase().trim()
+    if (locationCache.has(cacheKey)) {
+      const cached = locationCache.get(cacheKey)!
+      if (cached.length > 0) {
+        setBestLocationMatch(cached[0])
+        setShowLocationSuggestion(true)
+      } else {
+        setBestLocationMatch(null)
+        setShowLocationSuggestion(false)
+      }
       return
     }
 
@@ -428,7 +725,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&addressdetails=1&accept-language=en`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=3&addressdetails=1&accept-language=en`,
         {
           headers: {
             'User-Agent': 'June Dating App'
@@ -438,6 +735,10 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       
       if (response.ok) {
         const data: LocationSuggestion[] = await response.json()
+        
+        // Cache the result
+        locationCache.set(cacheKey, data)
+        
         if (data.length > 0) {
           setBestLocationMatch(data[0])
           setShowLocationSuggestion(true)
@@ -533,14 +834,14 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     }
   }, [])
 
-  // Trigger search when debounced value changes
+  // Trigger search when debounced value changes - now supports 2+ chars
   useEffect(() => {
     // Skip search if location was just selected
     if (isLocationSelected) {
       return
     }
     
-    if (debouncedLocationSearch && debouncedLocationSearch.length >= 3) {
+    if (debouncedLocationSearch && debouncedLocationSearch.length >= 2) {
       searchBestLocation(debouncedLocationSearch)
     } else {
       setBestLocationMatch(null)
@@ -554,10 +855,41 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setFullLocationData('')
     // Reset selection flag when user starts typing
     setIsLocationSelected(false)
-    // Clear existing suggestion when user modifies input
+    
+    // Instant local search for immediate feedback (no debouncing for local results)
+    if (value.length >= 2) {
+      const queryLower = value.toLowerCase().trim()
+      const localMatches = popularCities.filter(city => {
+        const cityLower = city.toLowerCase()
+        return cityLower.startsWith(queryLower) || cityLower.includes(queryLower)
+      }).sort((a, b) => {
+        const aLower = a.toLowerCase()
+        const bLower = b.toLowerCase()
+        const aStarts = aLower.startsWith(queryLower)
+        const bStarts = bLower.startsWith(queryLower)
+        if (aStarts && !bStarts) return -1
+        if (!aStarts && bStarts) return 1
+        return a.localeCompare(b)
+      })
+      
+      if (localMatches.length > 0) {
+        const bestLocal = localMatches[0]
+        const mockLocationSuggestion: LocationSuggestion = {
+          display_name: bestLocal,
+          lat: '0',
+          lon: '0',
+          place_id: Date.now()
+        }
+        setBestLocationMatch(mockLocationSuggestion)
+        setShowLocationSuggestion(true)
+        return
+      }
+    }
+    
+    // Clear suggestion if no local matches
     setBestLocationMatch(null)
     setShowLocationSuggestion(false)
-    // The useEffect above will handle the API call via debouncing
+    // The useEffect above will handle the API call via debouncing for non-local searches
   }
 
   const selectBestLocation = () => {
@@ -823,27 +1155,29 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              {/* Header */}
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border-b border-white/10 p-6 text-center">
-                <button
-                  onClick={handleClose}
-                  className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/8 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-500 flex items-center justify-center text-white/90 text-lg font-extralight hover:rotate-90"
-                >
-                  ×
-                </button>
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="space-y-2"
-                >
-                  <h2 className="text-2xl font-light text-white tracking-wider">Apply to June</h2>
-                  <p className="text-sm text-white/70 font-light">
-                    {currentStep === 'personal' ? 'Personal Information' : 'Social Profiles'}
-                  </p>
-                </motion.div>
-              </div>
+              {/* Header - Hidden on success screen */}
+              {currentStep !== 'success' && (
+                <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border-b border-white/10 p-6 text-center">
+                  <button
+                    onClick={handleClose}
+                    className="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/8 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-500 flex items-center justify-center text-white/90 text-lg font-extralight hover:rotate-90"
+                  >
+                    ×
+                  </button>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                    className="space-y-2"
+                  >
+                    <h2 className="text-2xl font-light text-white tracking-wider">Apply to June</h2>
+                    <p className="text-sm text-white/70 font-light">
+                      {currentStep === 'personal' ? 'Personal Information' : 'Social Profiles'}
+                    </p>
+                  </motion.div>
+                </div>
+              )}
 
               {/* Form Content */}
               <div className="px-6 pb-6 pt-6">
