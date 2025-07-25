@@ -627,7 +627,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.85, y: 60 }}
         transition={{ type: "spring", stiffness: 250, damping: 30, duration: 0.6 }}
-        className="relative bg-white/8 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-2xl w-[60%] max-w-[60%] md:w-full md:max-w-md overflow-hidden"
+        className="relative bg-white/8 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-2xl w-[90%] max-w-[90%] md:w-full md:max-w-md overflow-hidden"
         style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)' }}
       >
         {/* Loading Screen */}
