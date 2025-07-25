@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata = {
-  metadataBase: new URL('https://junedate.com'),
+  metadataBase: new URL('https://june.date'),
   title: {
     template: "%s | June",
     default: "June - AI Dating App",
@@ -67,21 +67,28 @@ export const metadata = {
     icon: "/junelogo.png",
     shortcut: "/junelogo.png",
     apple: "/junelogo.png",
+    other: [
+      {
+        rel: "apple-touch-icon",
+        url: "/junelogo.png",
+      },
+    ],
   },
   manifest: "/manifest.json",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://junedate.com",
+    url: "https://june.date",
     siteName: "June",
     title: "June - AI Dating App",
     description: "The dating app of the future that connects you with your perfect match. No endless swiping.",
     images: [
       {
-        url: "/images/june-social.png",
+        url: "https://june.date/images/june-social.png",
         width: 1200,
         height: 630,
         alt: "June - AI Dating App",
+        type: "image/png",
       },
     ],
   },
@@ -91,7 +98,10 @@ export const metadata = {
     creator: "@junedate",
     title: "June - AI Dating App",
     description: "The dating app of the future that connects you with your perfect match. No endless swiping.",
-    images: ["/images/june-social.png"],
+    images: {
+      url: "https://june.date/images/june-social.png",
+      alt: "June - AI Dating App",
+    },
   },
   robots: {
     index: true,
@@ -105,7 +115,7 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://junedate.com",
+    canonical: "https://june.date",
   },
 }
 
@@ -115,8 +125,8 @@ const structuredData = {
   "name": "June",
   "applicationCategory": "SocialNetworkingApplication",
   "description": "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. Experience the future of online dating.",
-  "url": "https://junedate.com",
-  "downloadUrl": "https://junedate.com",
+  "url": "https://june.date",
+  "downloadUrl": "https://june.date",
   "operatingSystem": "iOS, Android, Web",
   "offers": {
     "@type": "Offer",
@@ -126,10 +136,10 @@ const structuredData = {
   "publisher": {
     "@type": "Organization",
     "name": "June",
-    "url": "https://junedate.com",
+    "url": "https://june.date",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://junedate.com/images/june-social.png"
+      "url": "https://june.date/images/june-social.png"
     }
   },
   "aggregateRating": {

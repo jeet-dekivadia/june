@@ -19,12 +19,6 @@ export function ManifestoCard() {
       image: "/aija.jpg"
     },
     {
-      name: "Nuseir Yassin", 
-      role: "Chief Marketing Officer",
-      linkedin: "https://www.linkedin.com/in/nyassin/",
-      image: "/nas.jpg"
-    },
-    {
       name: "Jeet Dekivadia",
       role: "Chief Technology Officer", 
       linkedin: "https://www.linkedin.com/in/jeetdekivadia/",
@@ -34,7 +28,7 @@ export function ManifestoCard() {
       name: "Kartik Bihani",
       role: "Chief Product Officer",
       linkedin: "https://www.linkedin.com/in/kbihani/",
-      image: "/headshot.jpeg"
+      image: "/gupta.jpeg"
     }
   ]
 
@@ -100,7 +94,7 @@ export function ManifestoCard() {
             </h1>
             <div className="text-white/90 text-sm leading-relaxed space-y-3">
               <p className="drop-shadow-sm">
-                10% people get 90% dates. The age of swiping is over.
+              We are entering an age of intelligence that knows humans beyond their looks. At June, we use the latest technology to find you your perfect match. By the time you join, we already know who you're meant to meet.
               </p>
             </div>
           </div>
@@ -108,13 +102,10 @@ export function ManifestoCard() {
           {/* Vision Statement - Clickable */}
           <div 
             onClick={() => setShowTeamModal(true)}
-            className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-amber-50/8 hover:border-amber-100/30 hover:shadow-lg"
+            className="bg-amber-50/5 backdrop-blur-sm border border-amber-100/20 rounded-2xl px-6 py-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-amber-50/8 hover:border-amber-100/30 hover:shadow-lg w-fit mx-auto"
           >
             <p className="text-sm text-white/90 drop-shadow-sm italic">
-              "It's not about more options—it's about the right option." 
-              <span className="text-xs text-white/70 mt-2 drop-shadow-sm">
-              &emsp;— The June Team
-              </span>
+              The June Team
             </p>
           </div>
 
@@ -161,49 +152,86 @@ export function ManifestoCard() {
               </h3>
             </div>
 
-            {/* Team Grid */}
-            <div className={clsx(
-              "grid gap-4",
-              // Mobile responsive grid
-              isMobile 
-                ? "grid-cols-1" // Single column on mobile
-                : "grid-cols-2" // Two columns on desktop
-            )}>
-              {teamMembers.map((member, index) => (
-                <div key={index} className="flex flex-col items-center text-center">
-                  {/* Profile Image */}
-                  <div className={clsx(
-                    "mb-3 rounded-full overflow-hidden border-2 border-white/30 shadow-lg",
-                    // Mobile responsive image size
-                    isMobile 
-                      ? "w-14 h-14" // Smaller images on mobile
-                      : "w-16 h-16" // Original size on desktop
-                  )}>
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={isMobile ? 56 : 64}
-                      height={isMobile ? 56 : 64}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  {/* Name and Role */}
-                  <div className="space-y-1">
-                    <a
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-sm font-medium text-white hover:text-white/80 transition-colors duration-200"
-                    >
-                      {member.name}
-                    </a>
-                    <p className="text-xs text-white/70">
-                      {member.role}
-                    </p>
-                  </div>
+            {/* Team Layout */}
+            <div className="flex flex-col items-center gap-4">
+              {/* Aija - CEO at top center */}
+              <div className="flex flex-col items-center text-center">
+                {/* Profile Image */}
+                <div className={clsx(
+                  "mb-3 rounded-full overflow-hidden border-2 border-white/30 shadow-lg",
+                  // Mobile responsive image size
+                  isMobile 
+                    ? "w-14 h-14" // Smaller images on mobile
+                    : "w-16 h-16" // Original size on desktop
+                )}>
+                  <Image
+                    src={teamMembers[0].image}
+                    alt={teamMembers[0].name}
+                    width={isMobile ? 56 : 64}
+                    height={isMobile ? 56 : 64}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
+                
+                {/* Name and Role */}
+                <div className="space-y-1">
+                  <a
+                    href={teamMembers[0].linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-sm font-medium text-white hover:text-white/80 transition-colors duration-200"
+                  >
+                    {teamMembers[0].name}
+                  </a>
+                  <p className="text-xs text-white/70">
+                    {teamMembers[0].role}
+                  </p>
+                </div>
+              </div>
+
+              {/* Jeet and Kartik - CTO and CPO below */}
+              <div className={clsx(
+                "grid gap-4",
+                isMobile 
+                  ? "grid-cols-1" // Single column on mobile
+                  : "grid-cols-2" // Two columns on desktop
+              )}>
+                {teamMembers.slice(1).map((member, index) => (
+                  <div key={index + 1} className="flex flex-col items-center text-center">
+                    {/* Profile Image */}
+                    <div className={clsx(
+                      "mb-3 rounded-full overflow-hidden border-2 border-white/30 shadow-lg",
+                      // Mobile responsive image size
+                      isMobile 
+                        ? "w-14 h-14" // Smaller images on mobile
+                        : "w-16 h-16" // Original size on desktop
+                    )}>
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        width={isMobile ? 56 : 64}
+                        height={isMobile ? 56 : 64}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    {/* Name and Role */}
+                    <div className="space-y-1">
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-sm font-medium text-white hover:text-white/80 transition-colors duration-200"
+                      >
+                        {member.name}
+                      </a>
+                      <p className="text-xs text-white/70">
+                        {member.role}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

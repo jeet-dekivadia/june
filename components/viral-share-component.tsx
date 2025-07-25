@@ -8,7 +8,7 @@ export function ViralShareComponent() {
   const [copied, setCopied] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  const shareUrl = "https://junedate.com"
+  const shareUrl = "https://june.date"
   const shareText = "Just applied to June - the revolutionary AI dating app that's changing how we find love. No more endless swiping! 💜✨ #JuneDating #FutureOfDating"
 
   const handleCopy = async () => {

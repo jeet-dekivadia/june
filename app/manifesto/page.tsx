@@ -26,13 +26,13 @@ export const metadata: Metadata = {
   publisher: "June",
   openGraph: {
     type: "article",
-    url: "https://junedate.com/manifesto",
+    url: "https://june.date/manifesto",
     title: "June Manifesto",
     description:
       "Read our manifesto on transforming how people find love. 10% of people get 90% of dates. The age of swiping is over. Discover the future of dating.",
     images: [
       {
-        url: "https://junedate.com/images/june-social.png",
+        url: "https://june.date/images/june-social.png",
         width: 1200,
         height: 630,
         alt: "June Manifesto - The Future of Dating",
@@ -52,10 +52,10 @@ export const metadata: Metadata = {
     title: "June Manifesto",
     description:
       "Read our manifesto on transforming how people find love. 10% of people get 90% of dates. The age of swiping is over.",
-    images: ["https://junedate.com/images/june-social.png"],
+    images: ["https://june.date/images/june-social.png"],
   },
   alternates: {
-    canonical: "https://junedate.com/manifesto",
+    canonical: "https://june.date/manifesto",
   },
   robots: {
     index: true,

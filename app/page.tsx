@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "AI dating app", 
     "dating app",
     "june date",
-    "junedate.com",
+    "june.date",
     "online dating",
     "dating site",
     "find girlfriend",
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://junedate.com",
+    url: "https://june.date",
     title: "June - AI Dating App",
     description:
       "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. No fake profiles. Experience the future of online dating.",
     images: [
       {
-        url: "https://junedate.com/images/june-social.png",
+        url: "https://june.date/images/june-social.png",
         width: 1200,
         height: 630,
         alt: "June - AI Dating App Logo",
@@ -65,10 +65,10 @@ export const metadata: Metadata = {
     title: "June - AI Dating App",
     description:
       "The revolutionary AI dating app that connects you with your perfect match. No endless swiping. Experience the future of online dating.",
-    images: ["https://junedate.com/images/june-social.png"],
+    images: ["https://june.date/images/june-social.png"],
   },
   alternates: {
-    canonical: "https://junedate.com",
+    canonical: "https://june.date",
   },
   robots: {
     index: true,

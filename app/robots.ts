@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/admin/'],
     },
-    sitemap: 'https://junedate.com/sitemap.xml',
-    host: 'https://junedate.com',
+    sitemap: 'https://june.date/sitemap.xml',
+    host: 'https://june.date',
   }
 } 

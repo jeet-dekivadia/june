@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Sparkles, ArrowRight, Star, Heart, Users, Zap, Shield, Crown, CheckCircle } from 'lucide-react'
+import { X, Sparkles, ArrowRight, Star, Heart, Users, Zap, Shield, Crown, CheckCircle, MapPin, Navigation, Search, Globe, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 
@@ -13,9 +13,9 @@ interface WaitlistModalProps {
 
 interface FormData {
   name: string
-  email: string
   phone: string
   countryCode: string
+  location: string
   gender: string
   age: string
   instagram: string
@@ -25,9 +25,9 @@ interface FormData {
 
 const initialFormData: FormData = {
   name: '',
-  email: '',
   phone: '',
   countryCode: '+1',
+  location: '',
   gender: '',
   age: '',
   instagram: '',
@@ -35,7 +35,32 @@ const initialFormData: FormData = {
   twitter: ''
 }
 
-type Step = 'personal' | 'social' | 'confirmation' | 'success'
+type Step = 'personal' | 'social' | 'success'
+
+// Location suggestion interface
+interface LocationSuggestion {
+  display_name: string
+  lat: string
+  lon: string
+  place_id: number
+}
+
+// Debounce hook for API calls
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+
+  return debouncedValue
+}
 
 // Comprehensive list of 150+ country codes with names
 const countryOptions = [
@@ -246,6 +271,27 @@ const countryOptions = [
   { code: '+998', name: 'Uzbekistan' }
 ]
 
+// Helper function to extract city and country from location string
+const extractCityCountry = (locationString: string): string => {
+  if (!locationString) return ''
+  
+  const parts = locationString.split(',').map(part => part.trim())
+  
+  // Try to identify city and country from the parts
+  if (parts.length >= 2) {
+    const city = parts[0]
+    const country = parts[parts.length - 1]
+    
+    // Skip intermediate parts like state/province for cleaner display
+    if (city && country && city !== country) {
+      return `${city}, ${country}`
+    }
+  }
+  
+  // Fallback to first part if parsing fails
+  return parts[0] || locationString
+}
+
 // Purple Liquid Glass Luma Spinner Component
 const PurpleLumaSpinner = () => {
   return (
@@ -322,48 +368,6 @@ const PurpleLumaSpinner = () => {
   )
 }
 
-// Enhanced Progress Circles Component
-const ProgressCircles = ({ currentStep }: { currentStep: Step }) => {
-  const steps = ['personal', 'social', 'confirmation']
-  const currentIndex = steps.indexOf(currentStep)
-
-  return (
-    <div className="flex justify-center items-center gap-6 px-6 py-4">
-      {[1, 2, 3].map((step, index) => {
-        const isActive = index <= currentIndex
-        const isCurrent = index === currentIndex
-        
-        return (
-          <motion.div
-            key={step}
-            className={`relative w-12 h-12 rounded-full flex items-center justify-center font-medium text-sm transition-all duration-500 ${
-              isCurrent 
-                ? 'bg-gradient-to-br from-white/25 to-white/10 backdrop-blur-xl border-2 border-white/30 text-white shadow-2xl scale-110' 
-                : isActive
-                ? 'bg-white/15 backdrop-blur-sm border border-white/20 text-white/90'
-                : 'bg-white/8 backdrop-blur-sm border border-white/10 text-white/60'
-            }`}
-            animate={{
-              scale: isCurrent ? 1.1 : 1,
-              boxShadow: isCurrent ? '0 0 30px rgba(255, 255, 255, 0.3)' : '0 0 0px rgba(255, 255, 255, 0)'
-            }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            {step}
-            {isCurrent && (
-              <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400/20 via-pink-400/10 to-rose-400/20"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              />
-            )}
-          </motion.div>
-        )
-      })}
-    </div>
-  )
-}
-
 export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [currentStep, setCurrentStep] = useState<Step>('personal')
   const [formData, setFormData] = useState<FormData>(initialFormData)
@@ -372,8 +376,17 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [waitlistPosition, setWaitlistPosition] = useState<number>(0)
   const [isInitialLoading, setIsInitialLoading] = useState(false)
   const [countryCodeInput, setCountryCodeInput] = useState('1')
+  const [bestLocationMatch, setBestLocationMatch] = useState<LocationSuggestion | null>(null)
+  const [fullLocationData, setFullLocationData] = useState<string>('') // Store complete location for geolocation
+  const [showLocationSuggestion, setShowLocationSuggestion] = useState(false)
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false)
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false)
+  const [isLocationSelected, setIsLocationSelected] = useState(false) // Prevent search after selection
   const supabase = createClient()
   const modalRef = useRef<HTMLDivElement>(null)
+
+  // Debounced search term for API calls - faster for better UX
+  const debouncedLocationSearch = useDebounce(formData.location, 150)
 
   // Handle initial loading animation when modal opens
   useEffect(() => {
@@ -387,8 +400,6 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     }
   }, [isOpen])
 
-
-
   const handleClose = () => {
     setCurrentStep('personal')
     setFormData(initialFormData)
@@ -396,32 +407,197 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setWaitlistPosition(0)
     setIsInitialLoading(false)
     setCountryCodeInput('1')
+    setBestLocationMatch(null)
+    setFullLocationData('')
+    setShowLocationSuggestion(false)
+    setIsLoadingLocation(false)
+    setIsDetectingLocation(false)
+    setIsLocationSelected(false)
     onClose()
+  }
+
+  // Optimized location search - returns only the best match
+  const searchBestLocation = useCallback(async (query: string) => {
+    if (query.length < 3) {
+      setBestLocationMatch(null)
+      setShowLocationSuggestion(false)
+      return
+    }
+
+    setIsLoadingLocation(true)
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&addressdetails=1&accept-language=en`,
+        {
+          headers: {
+            'User-Agent': 'June Dating App'
+          }
+        }
+      )
+      
+      if (response.ok) {
+        const data: LocationSuggestion[] = await response.json()
+        if (data.length > 0) {
+          setBestLocationMatch(data[0])
+          setShowLocationSuggestion(true)
+        } else {
+          setBestLocationMatch(null)
+          setShowLocationSuggestion(false)
+        }
+      }
+    } catch (error) {
+      console.error('Location search error:', error)
+      setBestLocationMatch(null)
+      setShowLocationSuggestion(false)
+    } finally {
+      setIsLoadingLocation(false)
+    }
+  }, [])
+
+  // Geolocation detection
+  const detectCurrentLocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by this browser')
+      return
+    }
+
+    setIsDetectingLocation(true)
+    setError('')
+
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000 // 5 minutes cache
+        })
+      })
+
+      const { latitude, longitude } = position.coords
+      
+      // Reverse geocoding to get location name
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=en`,
+        {
+          headers: {
+            'User-Agent': 'June Dating App'
+          }
+        }
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.display_name) {
+          // Store full location data for database
+          setFullLocationData(data.display_name)
+          // Display clean city, country format
+          const cleanLocation = extractCityCountry(data.display_name)
+          
+          // Set selection flag to prevent search from triggering
+          setIsLocationSelected(true)
+          
+          // Clear any existing suggestions
+          setShowLocationSuggestion(false)
+          setBestLocationMatch(null)
+          
+          // Update form data last
+          updateFormData('location', cleanLocation)
+        } else {
+          setError('Could not determine your location')
+        }
+      } else {
+        setError('Failed to get location details')
+      }
+    } catch (error) {
+      if (error instanceof GeolocationPositionError) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setError('Location access denied. Please enable location services.')
+            break
+          case error.POSITION_UNAVAILABLE:
+            setError('Location information is unavailable.')
+            break
+          case error.TIMEOUT:
+            setError('Location request timed out.')
+            break
+          default:
+            setError('An unknown error occurred while getting your location.')
+            break
+        }
+      } else {
+        setError('Failed to detect your current location')
+      }
+    } finally {
+      setIsDetectingLocation(false)
+    }
+  }, [])
+
+  // Trigger search when debounced value changes
+  useEffect(() => {
+    // Skip search if location was just selected
+    if (isLocationSelected) {
+      return
+    }
+    
+    if (debouncedLocationSearch && debouncedLocationSearch.length >= 3) {
+      searchBestLocation(debouncedLocationSearch)
+    } else {
+      setBestLocationMatch(null)
+      setShowLocationSuggestion(false)
+    }
+  }, [debouncedLocationSearch, searchBestLocation, isLocationSelected])
+
+  const handleLocationSearch = (value: string) => {
+    updateFormData('location', value)
+    // Clear full location data when user manually types
+    setFullLocationData('')
+    // Reset selection flag when user starts typing
+    setIsLocationSelected(false)
+    // Clear existing suggestion when user modifies input
+    setBestLocationMatch(null)
+    setShowLocationSuggestion(false)
+    // The useEffect above will handle the API call via debouncing
+  }
+
+  const selectBestLocation = () => {
+    if (bestLocationMatch) {
+      // Store full location for database if needed
+      setFullLocationData(bestLocationMatch.display_name)
+      // Display clean city, country format
+      const cleanLocation = extractCityCountry(bestLocationMatch.display_name)
+      
+      // Set selection flag to prevent search from triggering again
+      setIsLocationSelected(true)
+      
+      // Clear suggestion immediately
+      setShowLocationSuggestion(false)
+      setBestLocationMatch(null)
+      
+      // Update form data last to prevent triggering search
+      updateFormData('location', cleanLocation)
+    }
+  }
+
+  // Simple keyboard navigation for single suggestion
+  const handleLocationKeyDown = (e: React.KeyboardEvent) => {
+    if (!showLocationSuggestion) return
+
+    switch (e.key) {
+      case 'Enter':
+        e.preventDefault()
+        selectBestLocation()
+        break
+      case 'Escape':
+        e.preventDefault()
+        setShowLocationSuggestion(false)
+        break
+    }
   }
 
   // Enhanced validation functions
   const validateName = (name: string) => {
     return /^[a-zA-Z\s]+$/.test(name) // Only letters and spaces
-  }
-
-  const validateEmail = (email: string) => {
-    return email.includes('@') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
-
-  const checkEmailExists = async (email: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('waitlist')
-        .select('email')
-        .eq('email', email)
-        .limit(1)
-
-      if (error) throw error
-      return data && data.length > 0
-    } catch (error) {
-      console.error('Error checking email:', error)
-      return false
-    }
   }
 
   const validatePhone = (phone: string) => {
@@ -451,58 +627,15 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     }
   }
 
-  const extractUsername = (platform: string, value: string) => {
-    if (!value) return ''
-    
-    // If it's already just a username (no URL), return it with @
-    if (!value.includes('http') && !value.includes('.com')) {
-      return value.startsWith('@') ? value : `@${value}`
-    }
-    
-    // Extract username from URL
-    try {
-      const url = new URL(value.startsWith('http') ? value : `https://${value}`)
-      const pathname = url.pathname
-      
-      switch (platform) {
-        case 'instagram':
-          const igMatch = pathname.match(/\/([^\/]+)\/?$/)
-          return igMatch ? `@${igMatch[1]}` : value
-        case 'linkedin':
-          const liMatch = pathname.match(/\/in\/([^\/]+)\/?$/) || pathname.match(/\/([^\/]+)\/?$/)
-          return liMatch ? `@${liMatch[1]}` : value
-        case 'twitter':
-          const twMatch = pathname.match(/\/([^\/]+)\/?$/)
-          return twMatch ? `@${twMatch[1]}` : value
-        default:
-          return value
-      }
-    } catch {
-      return value
-    }
-  }
-
-  const handleNext = async () => {
+  const handleNext = () => {
     if (currentStep === 'personal') {
-      if (!formData.name || !formData.email || !formData.phone || !formData.gender || !formData.age) {
+      if (!formData.name || !formData.phone || !formData.location || !formData.gender || !formData.age) {
         setError('Please fill in all required fields')
         return
       }
       
       if (!validateName(formData.name)) {
         setError('Name can only contain letters and spaces')
-        return
-      }
-      
-      if (!validateEmail(formData.email)) {
-        setError('Please enter a valid email address')
-        return
-      }
-      
-      // Check if email already exists
-      const emailExists = await checkEmailExists(formData.email)
-      if (emailExists) {
-        setError('This email is already on the waitlist!')
         return
       }
       
@@ -517,25 +650,21 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       }
       setError('')
       setCurrentStep('social')
-    } else if (currentStep === 'social') {
-      if (!formData.instagram) {
-        setError('Instagram handle is required')
-        return
-      }
-      setError('')
-      setCurrentStep('confirmation')
     }
   }
 
   const handleBack = () => {
     if (currentStep === 'social') {
       setCurrentStep('personal')
-    } else if (currentStep === 'confirmation') {
-      setCurrentStep('social')
     }
   }
 
   const handleSubmit = async () => {
+    if (!formData.instagram) {
+      setError('Instagram handle is required')
+      return
+    }
+
     setIsSubmitting(true)
     setError('')
 
@@ -545,10 +674,12 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         .from('waitlist')
         .select('*', { count: 'exact', head: true })
 
-      const submissionData = {
-        email: formData.email,
+      // Try with all fields first
+      const fullSubmissionData = {
+        email: null, // Set email as null as requested
         name: formData.name,
         phone: `${formData.countryCode} ${formData.phone}`,
+        location: fullLocationData || formData.location, // Use full location data if available from geolocation
         gender: formData.gender,
         age: parseInt(formData.age),
         instagram: formatSocialUrl('instagram', formData.instagram),
@@ -557,38 +688,48 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         created_at: new Date()
       }
 
-      const { data, error: supabaseError } = await supabase
+      let { data, error: supabaseError } = await supabase
         .from('waitlist')
-        .insert([submissionData])
+        .insert([fullSubmissionData])
         .select()
 
-      if (supabaseError) {
-        if (supabaseError.code === '23505') {
-          throw new Error('This email is already on the waitlist!')
+      // If we get a column error, try with minimal data
+      if (supabaseError && (supabaseError.code === '42703' || supabaseError.message?.includes('column') || supabaseError.message?.includes('does not exist'))) {
+        console.log('Retrying with minimal data due to missing columns...')
+        
+        // Try with basic required fields only
+        const minimalData = {
+          name: formData.name,
+          instagram: formatSocialUrl('instagram', formData.instagram),
+          created_at: new Date()
         }
+
+        const { data: retryData, error: retryError } = await supabase
+          .from('waitlist')
+          .insert([minimalData])
+          .select()
+
+        if (retryError) {
+          console.error('Retry submission error:', retryError)
+          throw new Error(`Database error: ${retryError.message}. Please run the SQL migration in your Supabase dashboard.`)
+        }
+        
+        data = retryData
+        supabaseError = null
+      }
+
+      if (supabaseError) {
+        console.error('Supabase error:', supabaseError)
         
         if (supabaseError.code === '42501' || supabaseError.message?.includes('row-level security')) {
-          throw new Error('Permission denied. Please check your database security settings.')
+          throw new Error('Permission denied. Please run the SQL migration in your Supabase dashboard to update security policies.')
         }
         
-        if (supabaseError.code === '42703' || supabaseError.message?.includes('column') || supabaseError.message?.includes('does not exist')) {
-          const { error: fallbackError } = await supabase
-            .from('waitlist')
-            .insert([{
-              email: formData.email,
-              created_at: new Date()
-            }])
-            .select()
-          
-          if (fallbackError) {
-            if (fallbackError.code === '42501' || fallbackError.message?.includes('row-level security')) {
-              throw new Error('Database security configuration needs to be updated. Please contact support.')
-            }
-            throw new Error('Failed to submit application. Please try again.')
-          }
-        } else {
-          throw new Error(`Database error (${supabaseError.code}): ${supabaseError.message}`)
+        if (supabaseError.code === '23505') {
+          throw new Error('This information is already on the waitlist!')
         }
+        
+        throw new Error(`Database error (${supabaseError.code}): ${supabaseError.message}`)
       }
 
       // Set waitlist position (current count + 1 for the new entry)
@@ -596,7 +737,21 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       setCurrentStep('success')
     } catch (error) {
       console.error('Form submission error:', error)
-      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
+      
+      // More specific error messages
+      let errorMessage = 'An unexpected error occurred'
+      
+      if (error instanceof Error) {
+        if (error.message.includes('column') || error.message.includes('does not exist')) {
+          errorMessage = 'Database needs to be updated. Please run the SQL migration first.'
+        } else if (error.message.includes('row-level security') || error.message.includes('Permission denied')) {
+          errorMessage = 'Database security needs to be configured. Please run the SQL migration.'
+        } else {
+          errorMessage = error.message
+        }
+      }
+      
+      setError(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -684,14 +839,14 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   className="space-y-2"
                 >
                   <h2 className="text-2xl font-light text-white tracking-wider">Apply to June</h2>
+                  <p className="text-sm text-white/70 font-light">
+                    {currentStep === 'personal' ? 'Personal Information' : 'Social Profiles'}
+                  </p>
                 </motion.div>
               </div>
 
-              {/* Enhanced Progress Circles */}
-              <ProgressCircles currentStep={currentStep} />
-
               {/* Form Content */}
-              <div className="px-6 pb-6">
+              <div className="px-6 pb-6 pt-6">
                 <AnimatePresence mode="wait">
                   {currentStep === 'personal' && (
                     <motion.div
@@ -716,18 +871,6 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           }}
                           className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
                           placeholder="Enter your full name"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Email Address *</label>
-                        <motion.input
-                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => updateFormData('email', e.target.value)}
-                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="tryjune.dating@gmail.com"
                         />
                       </div>
 
@@ -764,6 +907,110 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         </div>
                       </div>
 
+                      <div className="space-y-3 relative">
+                        <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Location *</label>
+                        
+                        {/* Premium Location Input Container */}
+                        <div className="relative">
+                          <motion.div
+                            whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
+                            className="relative group"
+                          >
+                                                        <motion.input
+                              whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
+                              type="text"
+                              value={formData.location}
+                              onChange={(e) => handleLocationSearch(e.target.value)}
+                              onKeyDown={handleLocationKeyDown}
+                                                          onFocus={() => {
+                              if (bestLocationMatch && !isLocationSelected) {
+                                setShowLocationSuggestion(true)
+                              }
+                            }}
+                              onBlur={() => {
+                                // Delay hiding to allow clicks on suggestions
+                                setTimeout(() => {
+                                  setShowLocationSuggestion(false)
+                                }, 200)
+                              }}
+                              className="w-full px-4 py-3 pr-12 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                              placeholder="Enter your city..."
+                            />
+                            
+                            {/* Location Action Button */}
+                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={detectCurrentLocation}
+                                disabled={isDetectingLocation}
+                                className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                                title={isDetectingLocation ? "Detecting..." : "Use current location"}
+                                aria-label={isDetectingLocation ? "Detecting location" : "Detect current location"}
+                              >
+                                {isDetectingLocation ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <Navigation className="w-4 h-4" />
+                                )}
+                              </motion.button>
+                            </div>
+                          </motion.div>
+                        </div>
+
+                        {/* Clean Single Location Suggestion */}
+                        <AnimatePresence>
+                          {showLocationSuggestion && bestLocationMatch && (
+                            <motion.div
+                              key="location-suggestion"
+                              initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                              transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                              className="absolute z-20 w-full mt-2 bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-xl overflow-hidden"
+                            >
+                              <motion.button
+                                whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={selectBestLocation}
+                                className="w-full flex items-center gap-3 px-4 py-4 text-left transition-all duration-300"
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center flex-shrink-0">
+                                  <MapPin className="w-4 h-4 text-purple-300" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-white font-light">
+                                    {extractCityCountry(bestLocationMatch.display_name)}
+                                  </div>
+                                  <div className="text-white/50 text-xs mt-0.5 truncate">
+                                    {bestLocationMatch.display_name}
+                                  </div>
+                                </div>
+                                <div className="text-white/40 text-xs">
+                                  Press Enter
+                                </div>
+                              </motion.button>
+                            </motion.div>
+                          )}
+                          
+                          {/* Loading State */}
+                          {isLoadingLocation && (
+                            <motion.div
+                              key="location-loading"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="absolute z-20 w-full mt-2 bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-xl overflow-hidden"
+                            >
+                              <div className="flex items-center justify-center gap-3 px-4 py-4 text-white/70 text-sm">
+                                <div className="w-4 h-4 border-2 border-white/20 border-t-purple-400 rounded-full animate-spin" />
+                                <span className="font-light">Finding location...</span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
                           <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Gender *</label>
@@ -786,8 +1033,8 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
                             type="number"
-                            min="16"
-                            max="120"
+                            min="18"
+                            max="99"
                             value={formData.age}
                             onChange={(e) => updateFormData('age', e.target.value)}
                             className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
@@ -850,66 +1097,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         className="bg-gradient-to-br from-white/8 to-white/4 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mt-4"
                       >
                         <p className="text-xs text-white/80 font-light leading-relaxed text-center">
-                          <strong className="text-white font-medium">Why we ask:</strong> Your social presence helps our AI create better matches and ensures authentic connections.
-                        </p>
-                      </motion.div>
-                    </motion.div>
-                  )}
-
-                  {currentStep === 'confirmation' && (
-                    <motion.div
-                      key="confirmation"
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -30 }}
-                      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                      className="space-y-4"
-                    >
-                      <h3 className="text-xl font-light text-white mb-4 text-center tracking-wide">Review Your Application</h3>
-                      
-                      <div className="space-y-1 text-sm bg-gradient-to-br from-white/12 to-white/6 backdrop-blur-xl border border-white/15 rounded-3xl p-6 shadow-2xl">
-                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Name</span>
-                          <span className="text-white font-medium">{formData.name}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Email</span>
-                          <span className="text-white font-medium text-xs">{formData.email}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Phone</span>
-                          <span className="text-white font-medium">{formData.countryCode} {formData.phone}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Gender & Age</span>
-                          <span className="text-white font-medium">{formData.gender}, {formData.age}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                          <span className="text-white/70 font-medium tracking-wide text-xs uppercase">Instagram</span>
-                          <span className="text-white font-medium text-xs truncate max-w-32">{extractUsername('instagram', formData.instagram)}</span>
-                        </div>
-                        {formData.linkedin && (
-                          <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                            <span className="text-white/70 font-medium tracking-wide text-xs uppercase">LinkedIn</span>
-                            <span className="text-white font-medium truncate max-w-32 text-xs">{extractUsername('linkedin', formData.linkedin)}</span>
-                          </div>
-                        )}
-                        {formData.twitter && (
-                          <div className="flex justify-between items-center py-3 border-b border-white/15 last:border-b-0">
-                            <span className="text-white/70 font-medium tracking-wide text-xs uppercase">X (Twitter)</span>
-                            <span className="text-white font-medium text-xs truncate max-w-32">{extractUsername('twitter', formData.twitter)}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.5 }}
-                        className="bg-gradient-to-br from-white/8 to-white/4 backdrop-blur-sm border border-white/10 rounded-2xl p-4"
-                      >
-                        <p className="text-xs text-white/80 font-light leading-relaxed text-center">
-                          <strong className="text-white font-medium">What happens next?</strong> You'll receive your exclusive access code via email when your batch is ready.
+                          <strong className="text-white font-medium">Why we ask:</strong> Your social presence helps our AI create better matches.
                         </p>
                       </motion.div>
                     </motion.div>
@@ -1000,7 +1188,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     transition={{ delay: 0.4, duration: 0.5 }}
                     className="flex gap-3 mt-6"
                   >
-                    {currentStep !== 'personal' && (
+                    {currentStep === 'social' && (
                       <motion.button
                         whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                         whileTap={{ scale: 0.98 }}
@@ -1014,7 +1202,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     <motion.button
                       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={currentStep === 'confirmation' ? handleSubmit : handleNext}
+                      onClick={currentStep === 'social' ? handleSubmit : handleNext}
                       disabled={isSubmitting}
                       className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white px-5 py-3 rounded-2xl font-medium border border-white/20 hover:shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide"
                     >
@@ -1023,7 +1211,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           Submitting...
                         </>
-                      ) : currentStep === 'confirmation' ? (
+                      ) : currentStep === 'social' ? (
                         'Submit Application'
                       ) : (
                         'Continue'
