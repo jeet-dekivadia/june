@@ -1365,7 +1365,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             value={formData.social}
                             onChange={(e) => updateFormData('social', e.target.value)}
                             className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                            placeholder="@username (instagram/linkedin/twitter)"
+                            placeholder="@insta/linkedin)"
                           />
                         </div>
                       </div>
