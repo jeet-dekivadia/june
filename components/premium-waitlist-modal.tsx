@@ -16,11 +16,8 @@ interface FormData {
   phone: string
   countryCode: string
   location: string
-  gender: string
   age: string
-  instagram: string
-  linkedin: string
-  twitter: string
+  social: string
 }
 
 const initialFormData: FormData = {
@@ -28,14 +25,11 @@ const initialFormData: FormData = {
   phone: '',
   countryCode: '+',
   location: '',
-  gender: '',
   age: '',
-  instagram: '',
-  linkedin: '',
-  twitter: ''
+  social: ''
 }
 
-type Step = 'personal' | 'social' | 'success'
+type Step = 'personal' | 'success'
 
 // Location suggestion interface
 interface LocationSuggestion {
@@ -936,32 +930,36 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     return /^[0-9\s\(\)\-]+$/.test(phone) // Only numbers, spaces, parentheses, and hyphens
   }
 
-  const formatSocialUrl = (platform: string, value: string) => {
-    if (!value) return ''
+  const formatSocialUrl = (value: string) => {
+    if (!value) return { instagram: null, linkedin: null, twitter: null }
     
-    // If already a full URL, return as is
+    // If already a full URL, determine the platform
     if (value.startsWith('http://') || value.startsWith('https://')) {
-      return value
+      if (value.includes('instagram.com')) {
+        return { instagram: value, linkedin: null, twitter: null }
+      } else if (value.includes('linkedin.com')) {
+        return { instagram: null, linkedin: value, twitter: null }
+      } else if (value.includes('twitter.com') || value.includes('x.com')) {
+        return { instagram: null, linkedin: null, twitter: value }
+      }
+      // Default to Instagram if unknown URL
+      return { instagram: value, linkedin: null, twitter: null }
     }
     
     // Remove @ if present at the start
     const cleanValue = value.startsWith('@') ? value.slice(1) : value
     
-    switch (platform) {
-      case 'instagram':
-        return `https://instagram.com/${cleanValue}`
-      case 'linkedin':
-        return value.includes('linkedin.com') ? value : `https://linkedin.com/in/${cleanValue}`
-      case 'twitter':
-        return `https://twitter.com/${cleanValue}`
-      default:
-        return value
+    // Default to Instagram for username-only entries
+    return { 
+      instagram: `https://instagram.com/${cleanValue}`, 
+      linkedin: null, 
+      twitter: null 
     }
   }
 
   const handleNext = () => {
     if (currentStep === 'personal') {
-      if (!formData.name || !formData.phone || !formData.location || !formData.gender || !formData.age) {
+      if (!formData.name || !formData.phone || !formData.location || !formData.age || !formData.social) {
         setError('Please fill in all required fields')
         return
       }
@@ -980,23 +978,18 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         setError('Age must be between 18 and 99')
         return
       }
+      
       setError('')
-      setCurrentStep('social')
+      // Directly submit instead of going to next step
+      handleSubmit()
     }
   }
 
   const handleBack = () => {
-    if (currentStep === 'social') {
-      setCurrentStep('personal')
-    }
+    // No back functionality needed since it's a single step
   }
 
   const handleSubmit = async () => {
-    if (!formData.instagram) {
-      setError('Instagram handle is required')
-      return
-    }
-
     setIsSubmitting(true)
     setError('')
 
@@ -1006,17 +999,20 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         .from('waitlist')
         .select('*', { count: 'exact', head: true })
 
+      // Format social URLs
+      const socialUrls = formatSocialUrl(formData.social)
+
       // Try with all fields first
       const fullSubmissionData = {
         email: null, // Set email as null as requested
         name: formData.name,
         phone: `${formData.countryCode}${formData.phone.replace(/\s/g, '')}`, // Remove all spaces
         location: fullLocationData || formData.location, // Use full location data if available from geolocation
-        gender: formData.gender,
+        gender: null, // Set gender as null
         age: parseInt(formData.age),
-        instagram: formatSocialUrl('instagram', formData.instagram),
-        linkedin: formData.linkedin ? formatSocialUrl('linkedin', formData.linkedin) : null,
-        twitter: formData.twitter ? formatSocialUrl('twitter', formData.twitter) : null,
+        instagram: socialUrls.instagram,
+        linkedin: socialUrls.linkedin,
+        twitter: socialUrls.twitter,
         created_at: new Date()
       }
 
@@ -1032,7 +1028,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         // Try with basic required fields only
         const minimalData = {
           name: formData.name,
-          instagram: formatSocialUrl('instagram', formData.instagram),
+          instagram: socialUrls.instagram,
           created_at: new Date()
         }
 
@@ -1173,7 +1169,7 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   >
                     <h2 className="text-2xl font-light text-white tracking-wider">Apply to June</h2>
                     <p className="text-sm text-white/70 font-light">
-                      {currentStep === 'personal' ? 'Personal Information' : 'Social Profiles'}
+                      Personal Information
                     </p>
                   </motion.div>
                 </div>
@@ -1348,22 +1344,6 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Gender *</label>
-                          <motion.select
-                            whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                            value={formData.gender}
-                            onChange={(e) => updateFormData('gender', e.target.value)}
-                            className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm appearance-none"
-                            style={{ backgroundImage: 'none' }}
-                          >
-                            <option value="" className="bg-black text-white">Select</option>
-                            <option value="Male" className="bg-black text-white">Male</option>
-                            <option value="Female" className="bg-black text-white">Female</option>
-                            <option value="Other" className="bg-black text-white">Other</option>
-                          </motion.select>
-                        </div>
-
-                        <div className="space-y-2">
                           <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Age *</label>
                           <motion.input
                             whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
@@ -1376,65 +1356,19 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             placeholder="27"
                           />
                         </div>
-                      </div>
-                    </motion.div>
-                  )}
 
-                  {currentStep === 'social' && (
-                    <motion.div
-                      key="social"
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -30 }}
-                      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                      className="space-y-4"
-                    >
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Instagram Handle *</label>
-                        <motion.input
-                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                          type="text"
-                          value={formData.instagram}
-                          onChange={(e) => updateFormData('instagram', e.target.value)}
-                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="@yourusername or full profile URL"
-                        />
+                        <div className="space-y-2">
+                          <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">Social *</label>
+                          <motion.input
+                            whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
+                            type="text"
+                            value={formData.social}
+                            onChange={(e) => updateFormData('social', e.target.value)}
+                            className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
+                            placeholder="@username (instagram/linkedin/twitter)"
+                          />
+                        </div>
                       </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">LinkedIn Profile (Optional)</label>
-                        <motion.input
-                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                          type="text"
-                          value={formData.linkedin}
-                          onChange={(e) => updateFormData('linkedin', e.target.value)}
-                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="username or full profile URL"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-white/90 tracking-wider uppercase">X (Twitter) Handle (Optional)</label>
-                        <motion.input
-                          whileFocus={{ scale: 1.01, transition: { duration: 0.2 } }}
-                          type="text"
-                          value={formData.twitter}
-                          onChange={(e) => updateFormData('twitter', e.target.value)}
-                          className="w-full px-4 py-3 bg-black/30 backdrop-blur-sm border border-white/15 rounded-2xl text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/40 transition-all duration-500 font-light text-sm"
-                          placeholder="@yourusername or full profile URL"
-                        />
-                      </div>
-
-                      <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.5 }}
-                        className="bg-gradient-to-br from-white/8 to-white/4 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mt-4"
-                      >
-                        <p className="text-xs text-white/80 font-light leading-relaxed text-center">
-                          <strong className="text-white font-medium">Why we ask:</strong> Your social presence helps our AI create better matches.
-                        </p>
-                      </motion.div>
                     </motion.div>
                   )}
 
@@ -1523,21 +1457,10 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     transition={{ delay: 0.4, duration: 0.5 }}
                     className="flex gap-3 mt-6"
                   >
-                    {currentStep === 'social' && (
-                      <motion.button
-                        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleBack}
-                        className="px-5 py-3 bg-white/8 backdrop-blur-sm border border-white/20 rounded-2xl text-white hover:bg-white/15 transition-all duration-500 font-medium text-sm tracking-wide"
-                      >
-                        Back
-                      </motion.button>
-                    )}
-                    
                     <motion.button
                       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={currentStep === 'social' ? handleSubmit : handleNext}
+                      onClick={handleNext}
                       disabled={isSubmitting}
                       className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white px-5 py-3 rounded-2xl font-medium border border-white/20 hover:shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide"
                     >
@@ -1546,10 +1469,8 @@ export function PremiumWaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           Submitting...
                         </>
-                      ) : currentStep === 'social' ? (
-                        'Submit Application'
                       ) : (
-                        'Continue'
+                        'Submit Application'
                       )}
                     </motion.button>
                   </motion.div>
