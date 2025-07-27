@@ -7,11 +7,11 @@ export function FomoBanner() {
 
   // Real profile photos from public folder
   const profilePhotos = [
-    { id: 1, name: 'Adriana', src: '/adriana.jpg' },
-    { id: 2, name: 'Aija', src: '/aija.jpg' },
-    { id: 3, name: 'Henry', src: '/henry.webp' },
-    { id: 4, name: 'Megan', src: '/megan.webp' },
-    { id: 5, name: 'Nas', src: '/nas.jpg' }
+    { id: 1, name: 'girl', src: '/1.jpeg' },
+    { id: 2, name: 'girll', src: '/2.jpeg' },
+    { id: 3, name: 'man', src: '/3.jpeg' },
+    { id: 4, name: 'Mann', src: '/4.jpeg' },
+    { id: 5, name: 'gurls', src: '/5.jpeg' }
   ]
 
   return (

@@ -105,10 +105,10 @@ export function VideoCornerPlayer() {
               <div className={`flex items-center ${isMobile ? '-space-x-1' : '-space-x-2'}`}>
                 {[
                   { id: 1, name: 'Adriana', src: '/adriana.jpg' },
-                  { id: 2, name: 'Aija', src: '/aija.jpg' },
-                  { id: 3, name: 'Henry', src: '/henry.webp' },
+                  { id: 2, name: 'Aija', src: '/2.jpeg' },
+                  { id: 3, name: 'Henry', src: '/1.jpeg' },
                   { id: 4, name: 'Megan', src: '/megan.webp' },
-                  { id: 5, name: 'Nas', src: '/nas.jpg' }
+                  { id: 5, name: 'Nas', src: '/3.jpeg' }
                 ].map((photo, index) => (
                   <motion.div
                     key={photo.id}

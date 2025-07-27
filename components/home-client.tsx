@@ -16,7 +16,7 @@ export function HomeClient() {
                   {/* Heading */}
           <div className="space-y-3">
             <h1 className="text-xl sm:text-2xl font-medium text-white whitespace-pre-wrap text-pretty drop-shadow-lg">
-              Welcome to the Future of Dating
+              The Future of Dating
             </h1>
             <div className="text-white/70 text-sm [&>p]:tracking-tight text-pretty">
               <p className="drop-shadow-sm">
