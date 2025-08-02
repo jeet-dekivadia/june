@@ -152,12 +152,6 @@ export function VideoCornerPlayer() {
                     `Join ${count+5000} others on the June waitlist`
                   )}
                 </span>
-                {/* Only show launch date on desktop */}
-                {!isMobile && (
-                  <span className="text-white/90 text-xs drop-shadow-sm">
-                    <strong className="text-white">Launching August 18, 2025</strong> • National Couples Day
-                  </span>
-                )}
               </div>
             </motion.div>
           </div>
